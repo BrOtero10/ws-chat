@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap');
+
+:root {
+
+  /* VARIÁVEIS DE CORES */
+
+  --c-blue-l:    #F6FBFF;
+  --c-blue:      #cee7f7;
+  --c-blue-d1:   #A1CBE6;
+  --c-blue-d2:   #73A8CA;
+  --c-blue-d3:   #316C93;
+
+  --c-purple-l:  #F7F7FF;
+  --c-purple:    #D3D5F8;
+  --c-purple-d1: #AAADEA;
+  --c-purple-d2: #8084D2;
+  --c-purple-d3: #3F44A0;
+  
+  --c-green-l:   #F6FFFA;
+  --c-green:     #CCF8E3;
+  --c-green-d1:  #A0EAC6;
+  --c-green-d2:  #72D2A4;
+  --c-green-d3:  #2EA069;
+
+  /* VARIÁVEIS DE DIMENSÕES */
+
+  --width-toolbar: 80px;
+  --width-friend-list: max(18vw, 150px);;
+  --height-details-bar: 72.5px;
+  --height-write-bar: 12vh;
+
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 60px 20px 20px 40px;
+  background-color: var(--c-blue-l);
+  font-family: 'Red Hat Text';
+}
+
+h1, h2 {
+  font-family: 'Lexend Deca';
+}

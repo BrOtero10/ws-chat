@@ -1,0 +1,66 @@
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--width-toolbar);
+    height: 100vh;
+    background: linear-gradient(135deg, var(--c-blue-d1) 0%, var(--c-blue-d2) 10%, var(--c-blue-d2) 90%, var(--c-blue-d1) 100%) ;
+    z-index: 10;
+}
+
+.toolbar .logo {
+    height: 40px;
+    margin: 20px 0;
+}
+
+.toolbar .log-out {
+    margin: 20px 5px 10px;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tabs .selected {
+    background-color: var(--c-blue);
+    font-weight: bold;
+    color: var(--c-green-d3)
+}
+
+.tabs > div, .log-out {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    margin: 0 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.tabs > div:hover, .log-out:hover {
+    font-weight: 600;
+    background: linear-gradient(
+        135deg,
+        var(--c-blue-d2) 0%, 
+        var(--c-blue-d1) 10%, 
+        var(--c-blue-d1) 90%, 
+        var(--c-blue-d2) 100%);
+}
+
+.tabs > div > img, .log-out > img {
+    height: 22px;
+    aspect-ratio: 1/1;
+}
+
+.toolbar span {
+    margin-top: 5px;
+    font-size: 10px;
+    text-align: center;
+}

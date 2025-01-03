@@ -1,0 +1,36 @@
+.details-bar {
+    position: fixed;
+    width: calc(100% - var(--width-toolbar) - var(--width-friend-list));
+    height: var(--height-details-bar);
+    left: calc(var(--width-toolbar) + var(--width-friend-list));
+    top: 0;
+    padding: 0 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--c-blue);
+    z-index: 6;
+}
+
+.details-bar .friend-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.details-bar .actions {
+    display: flex;
+    align-items: center;
+    gap: 25px
+}
+
+.details-bar .actions img {
+    height: 50px;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.details-bar .actions img:hover {
+    background-color: var(--c-blue-d1);
+    transition: .2s;
+    border-radius: 10px;
+}

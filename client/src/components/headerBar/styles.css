@@ -1,0 +1,35 @@
+.header-bar {
+    position: fixed;
+    right: 0;
+    top: 0px;
+    width: 100vw;
+    height: 50px;
+    padding-right: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: linear-gradient(var(--c-blue-d2), var(--c-blue-d1)) ;
+}
+
+.header-bar .logo {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    left: 25px
+}
+
+.header-bar .logo img {
+    height: 35px;
+}
+
+.header-bar div:not(.logo) {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.header-bar div:not(.logo):hover {
+    background: linear-gradient(var(--c-blue-d1), var(--c-blue));
+}

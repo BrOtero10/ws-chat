@@ -1,0 +1,95 @@
+.friend-list {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: var(--width-friend-list);
+    top: 0;
+    left: var(--width-toolbar);
+    background: var(--c-purple-l);
+    border: none;
+    border-right: 1px solid var(--c-purple);
+    overflow-y: auto;
+    z-index: 8;
+}
+
+.friend-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.friend-list::-webkit-scrollbar-thumb {
+    background-color: var(--c-purple);
+    border-radius: 5px;
+}
+
+.friend-list::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.search-friend {
+    height: 72px;
+    padding: 16px;
+    position: relative; 
+}
+
+.search-friend img {
+    height: 20px;
+    aspect-ratio: 1/1;
+    position: absolute;
+    left: 21px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search-friend input {
+    padding: 0 15px 0 35px;
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    background-color: var(--c-purple);
+}
+
+.friend-list > div:not(.search-friend) {
+    padding: 20px 12px;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.friend-list > div:not(.search-friend):hover {
+    background-color: var(--c-purple);
+    transition: .2s;
+}
+
+.friend-list .username {
+    flex: 1;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-list .common-friends {
+    font-size: 10px;
+    font-weight: bold;
+    align-self: flex-end;
+}
+
+.friend-list > div:not(.search-friend):hover > .common-friends {
+    display: none;
+}
+
+.friend-list > div:not(.search-friend) > span:not(.username) > img {
+    cursor: pointer;
+    display: none;
+    height: 22px;
+    aspect-ratio: 1/1;
+}
+
+.friend-list > div:not(.search-friend):hover > span:not(.username) > img {
+    display: block;
+}

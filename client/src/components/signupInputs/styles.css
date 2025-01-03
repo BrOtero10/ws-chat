@@ -1,0 +1,51 @@
+.signup-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 0 200px; */
+}
+
+.signup-inputs > * {
+    width: 40vw;
+}
+
+
+.signup-inputs label {
+    font-size: 18px;
+}
+
+.signup-inputs > *:not(label) {
+    margin: 15px 0 40px;
+}
+
+.signup-inputs input {
+    background-color: #e1e4fb;
+}
+
+.signup-inputs input:-webkit-autofill {
+    background-color: #d9edf9 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #d9edf9 inset;
+}
+
+.signup-inputs input, .signup-inputs button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;   
+    font-size: 18px;
+}
+
+.signup-inputs button {
+    background-color: var(--c-purple-d2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.signup-inputs button:hover {
+    background-color: var(--c-purple-d1);
+}
+
+.signup-inputs .password-field img, .signup-inputs .confirm-password-field img {
+    width: 26px;
+    aspect-ratio: 1/1;
+}
