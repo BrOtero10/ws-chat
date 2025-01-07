@@ -84,3 +84,12 @@
     background-color: var(--c-purple);
     z-index: 100;
 }
+
+.my-profile-page {
+    position: absolute;
+    top: 0;
+    left: var(--width-toolbar);
+    width: calc(100% - var(--width-toolbar));
+    height: 100%;
+    overflow-y: hidden;
+}

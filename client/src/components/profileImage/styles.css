@@ -1,0 +1,36 @@
+.profile-area {
+    background-color: var(--c-blue-d2);
+    position: relative;
+    width: 100%;
+    height: calc(40% + 60px);
+    padding: 20px;
+    display: block;
+}
+
+.profile-image {
+    background-color: var(--c-blue);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    height: calc(100% - 60px);
+    aspect-ratio: 1/1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.profile-image img {
+    position: relative;
+    height: 70.7%;
+    aspect-ratio: 1/1;
+}
+
+.profile-area .username {
+    position: relative;
+    height: 60px;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 500;
+    color: var(--c-blue-l);
+}
