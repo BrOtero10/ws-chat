@@ -12,7 +12,16 @@ function getUsers() {
 
 // Função para obter um usuário específico
 function getUser(id) {
-    return userData.find(user => user.id === id);
+    const user = userData.find(user => user.id === id);
+    return user;
+}
+
+function getUserByUsername(username) {
+    const foundUsers = userData.filter(user => user.username.includes(username));
+    // for(user of foundUsers) {
+    //     delete user.password;
+    // }
+    return foundUsers;
 }
 
 // Função para criar um novo usuário
@@ -43,6 +52,7 @@ function deleteUser(id) {
 module.exports = {
     getUsers,
     getUser,
+    getUserByUsername,
     createUser,
     updateUser,
     deleteUser

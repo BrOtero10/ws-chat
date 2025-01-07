@@ -24,6 +24,18 @@ const getUser = (req, res) => {
     }
 }
 
+const getUserByUserName = (req, res) => {
+    try {
+        const { username } = req.params;
+        const userData = usersModel.getUserByUsername(username);
+        res.status(200).json(userData);
+    } catch (error) {
+        console.log("Error - getUserByUserName");
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving user" });
+    }
+}
+
 const createUser = (req, res) => {
     try {
         const newUser = req.body;
@@ -69,6 +81,7 @@ const deleteUser = (req, res) => {
 module.exports = {
     getUsers,
     getUser,
+    getUserByUserName,
     createUser,
     updateUser,
     deleteUser

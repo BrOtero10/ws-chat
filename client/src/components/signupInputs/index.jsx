@@ -1,9 +1,13 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import PasswordInput from '../passwordInput'
 import './styles.css'
+import { addUser } from '../../services/users'
 
 export default function SignUpInputs() {
     
+    const navigate = useNavigate();
+
     const [newUserData, setNewUserData] = useState({
         username: '',
         birthday: '',
@@ -21,8 +25,22 @@ export default function SignUpInputs() {
         })
     }
 
+    const handleSignup = async (e) => {
+        e.preventDefault();
+
+        if(newUserData.password.trim() !== newUserData.confirmPassword.trim()) {
+            alert("Confirmação de senha incorreta!");
+            return;
+        }
+
+        const userData = newUserData;
+        delete userData.confirmPassword;
+        await addUser(userData);
+        useNavigate('/login');
+    }
+
     return (
-        <div className="signup-inputs">
+        <form className="signup-inputs">
             <label htmlFor='username'>Insira seu nome de usuário</label>
             <input type="text" className="username-input" name='username'
                 value={newUserData.username} onChange={handleInputChange}
@@ -50,7 +68,7 @@ export default function SignUpInputs() {
                 value={newUserData.confirmPassword} onChange={handleInputChange}
             />
 
-            <button>Cadastrar</button>
-        </div>
+            <button type='submit' onClick={handleSignup}>Cadastrar</button>
+        </form>
     )
 }

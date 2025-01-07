@@ -4,4 +4,113 @@
     height: 50%;
     left: 0;
     top: 0;
+    padding-bottom: 30px;
+}
+
+.requests {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    overflow: auto;
+}
+
+.requests::-webkit-scrollbar {
+    height: 5px;
+    position: relative;
+}
+
+.requests::-webkit-scrollbar-thumb {
+    background-color: var(--c-purple);
+    border-radius: 5px;
+}
+
+.requests::-webkit-scrollbar-thumb:active {
+    background-color: var(--c-purple-d1);
+}
+
+.requests::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+
+.request {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 65%;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    background-color: var(--c-purple);
+    cursor: pointer;
+}
+
+.request img {
+    width: 50px;
+    aspect-ratio: 1/1;
+}
+
+.request p {
+    position: relative;
+    top: 15px;
+}
+
+.request .actions {
+    background-color: var(--c-purple);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    padding: 2px 0;
+    border-radius: 10px;
+    display: none;
+}
+
+.request:hover .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.request .actions div {
+    background-color: var(--c-purple);
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.request .actions div:hover {
+    color: #fff;
+    font-weight: bold;
+}
+
+.request .actions div:first-child {
+    background-color: var(--c-green);
+}
+
+.request .actions div:first-child:hover {
+    background-color: var(--c-green-d1); /* ou var(--c-green-d2) */
+}
+
+.request .actions div:last-child {
+    background-color: var(--c-blue);
+}
+
+.request .actions div:last-child:hover {
+    background-color: var(--c-blue-d1); /* ou var(--c-blue-d2) */
+}
+
+.no-solicitations-text {
+    position: relative;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
 }

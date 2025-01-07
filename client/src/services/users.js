@@ -1,4 +1,14 @@
-import { getUsers, getUser, createUser, updateUser, deleteUser } from '../api/users';
+import { getUsers, getUser, createUser, updateUser, deleteUser, getUsersByUsername } from '../api/users';
+
+export const addUser = async (userData) => {
+    try {
+        const newUser = await createUser(userData);
+        return newUser;
+    } catch (error) {
+        console.error('Erro ao adicionar usuário no serviço:', error);
+        throw error;
+    }
+};
 
 export const login = async (email, password) => {
     try {
@@ -18,6 +28,16 @@ export const login = async (email, password) => {
     }
 }
 
+export const fetchUsersByUsername = async (username) => {
+    try {
+        const friends = await getUsersByUsername(username);
+        return friends;
+    } catch (error) {
+        console.error('Erro ao buscar amigos no serviço:', error);
+        throw error;
+    }
+};
+
 // export const fetchUsers = async () => {
 //     try {
 //         const users = await getUsers();
@@ -34,16 +54,6 @@ export const login = async (email, password) => {
 //         return user;
 //     } catch (error) {
 //         console.error(`Erro ao buscar usuário com ID ${id} no serviço:`, error);
-//         throw error;
-//     }
-// };
-
-// export const addUser = async (userData) => {
-//     try {
-//         const newUser = await createUser(userData);
-//         return newUser;
-//     } catch (error) {
-//         console.error('Erro ao adicionar usuário no serviço:', error);
 //         throw error;
 //     }
 // };

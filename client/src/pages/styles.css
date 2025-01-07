@@ -74,6 +74,7 @@
     width: calc(100% - var(--width-toolbar) - var(--width-friend-list));
     height: 100%;
     padding: 25px;
+    overflow-y: hidden;
 }
 
 .add-friends-page .divisor {

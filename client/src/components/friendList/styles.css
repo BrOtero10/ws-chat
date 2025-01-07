@@ -10,6 +10,7 @@
     border: none;
     border-right: 1px solid var(--c-purple);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 8;
 }
 
@@ -20,6 +21,11 @@
 .friend-list::-webkit-scrollbar-thumb {
     background-color: var(--c-purple);
     border-radius: 5px;
+    /* cursor: none; */
+}
+
+.friend-list::-webkit-scrollbar-thumb:active {
+    background-color: var(--c-purple-d1);
 }
 
 .friend-list::-webkit-scrollbar-track {
@@ -52,7 +58,7 @@
     background-color: var(--c-purple);
 }
 
-.friend-list > div:not(.search-friend) {
+.friend-list > div > div:not(.search-friend) {
     padding: 20px 12px;
     border: none;
     display: flex;
@@ -62,7 +68,7 @@
     gap: 5px;
 }
 
-.friend-list > div:not(.search-friend):hover {
+.friend-list > div > div:not(.search-friend):hover {
     background-color: var(--c-purple);
     transition: .2s;
 }
@@ -79,17 +85,31 @@
     align-self: flex-end;
 }
 
-.friend-list > div:not(.search-friend):hover > .common-friends {
+.friend-list > div > div:not(.search-friend):hover > .common-friends {
     display: none;
 }
 
-.friend-list > div:not(.search-friend) > span:not(.username) > img {
+.friend-list > div > div:not(.search-friend) > span:not(.username) > img {
     cursor: pointer;
     display: none;
     height: 22px;
     aspect-ratio: 1/1;
 }
 
-.friend-list > div:not(.search-friend):hover > span:not(.username) > img {
+.friend-list > div > div:not(.search-friend):hover > span:not(.username) > img {
     display: block;
+}
+
+.friend-list h4 {
+    position: relative;
+    font-size: 12px;
+    left: 15px
+}
+
+.friend-list .divisor {
+    position: relative;
+    background-color: var(--c-purple);
+    height: 1.5px;
+    width: 90%;
+    margin: 20px auto;
 }

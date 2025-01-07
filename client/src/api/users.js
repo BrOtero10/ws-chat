@@ -23,6 +23,16 @@ export const getUser = async (id) => {
     }
 };
 
+export const getUsersByUsername = async (username) => {
+    try {
+        const response = await axios.get(`${API_URL}/user/username/${username}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Erro ao buscar usuário com username ${username}:`, error);
+        throw error;
+    }
+}
+
 export const createUser = async (userData) => {
     try {
         const response = await axios.post(`${API_URL}/user`, userData);

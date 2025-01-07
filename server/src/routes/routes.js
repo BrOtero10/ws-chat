@@ -17,4 +17,8 @@ router.use('/', groupsRoute);
 const friendsRoute = require('./friendsRoute');
 router.use('/', friendsRoute);
 
+// Friend Solicitations
+const friendSolicitationsRoute = require('./friendSolicitationsRoute');
+router.use('/', friendSolicitationsRoute);
+
 module.exports = router; 
