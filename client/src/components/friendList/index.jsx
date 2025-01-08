@@ -1,7 +1,7 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserFriends } from "../../services/friends";
+import { fetchUserFriends, removeFriendFromUser } from "../../services/friends";
 import { fetchUsersByUsername } from "../../services/users";
 import { fetchFriendSolicitationsFromUser, addFriendSolicitation } from "../../services/friendSolicitations";
 import searchIcon from "/search.svg";
@@ -114,6 +114,11 @@ export default function FriendList({setUserFilterString}) {
         await addFriendSolicitation(solicitationData);
     }
 
+    const removeFriend = async (targetId) => {
+        await removeFriendFromUser(userId, targetId);
+        console.log(targetId, 'removido')
+    }
+
     return (
         <div className="friend-list">
             <div className="search-friend">
@@ -133,7 +138,9 @@ export default function FriendList({setUserFilterString}) {
                             <span className="info"
                                 onClick={() => navigate(`/profile/${friend.id}`)}
                             ><img src={infoIcon}/></span>
-                            <span className="remove" title="Remover amizade"><img src={removeFriendIcon}/></span>
+                            <span className="remove" title="Remover amizade"
+                                onClick={() => removeFriend(friend.id)}
+                            ><img src={removeFriendIcon}/></span>
                         </div>
                     )}
                 </div>

@@ -77,6 +77,7 @@ const removeFriend = (req, res) => {
     try {
         const { userId } = req.params;
         const { friendId } = req.body;
+        console.log('body: ', req.body);
         friendsModel.removeFriend(userId, friendId);
         res.status(200).json({ message: "Friend removed successfully" });
     } catch (error) {
