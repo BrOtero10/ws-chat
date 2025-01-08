@@ -6,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage";
 import ChatPage from "./pages/ChatPage";
 import AddFriends from "./pages/AddFriends";
 import MyProfile from "./pages/MyProfile";
+import UserProfile from "./pages/UserProfile";
 
 export default function Router() {
 
@@ -19,6 +20,7 @@ export default function Router() {
         <Route element={<ChatPage/>} path="/chat/:friendId" exact />
         <Route element={<AddFriends/>} path="/add_friends" exact />
         <Route element={<MyProfile/>} path="/my_profile" exact />
+        <Route element={<UserProfile/>} path="/profile/:userId" exact />
       </Routes>
     </BrowserRouter>
   )

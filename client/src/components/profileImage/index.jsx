@@ -1,9 +1,7 @@
 import "./styles.css";
 import profileImage from "/user.svg"
 
-export default function ProfileImage() {
-    
-    const username = 'megagamerop12'
+export default function ProfileImage({ username = 'oi' }) {
     
     return (
         <div className="profile-area">

@@ -48,15 +48,15 @@ export const fetchUsersByUsername = async (username) => {
 //     }
 // };
 
-// export const fetchUser = async (id) => {
-//     try {
-//         const user = await getUser(id);
-//         return user;
-//     } catch (error) {
-//         console.error(`Erro ao buscar usuário com ID ${id} no serviço:`, error);
-//         throw error;
-//     }
-// };
+export const fetchUser = async (id) => {
+    try {
+        const user = await getUser(id);
+        return user;
+    } catch (error) {
+        console.error(`Erro ao buscar usuário com ID ${id} no serviço:`, error);
+        throw error;
+    }
+};
 
 // export const modifyUser = async (id, userData) => {
 //     try {
