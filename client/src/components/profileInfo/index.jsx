@@ -1,6 +1,6 @@
 import "./styles.css";
 
-export default function ProfileInfo() {
+export default function ProfileInfo({ userId }) {
 
     const user = {
         name: "Bruno Otero",
@@ -17,13 +17,13 @@ export default function ProfileInfo() {
     return (
         <div className="profile-info">
             <div>
-                <p className="name">Nome: </p><span className="user-data">{user.name}</span>
-                <p className="age">Idade: </p><span className="user-data">{user.age}</span>
-                <p className="birthday">Data de nascimento: </p><span className="user-data">{formatDate(user.birthday)}</span>           
+                <p className="name">Nome: <span className="user-data">{user.name}</span></p>
+                <p className="age">Idade: <span className="user-data">{user.age}</span></p>
+                <p className="birthday">Data de nascimento: <span className="user-data">{formatDate(user.birthday)}</span></p>     
            </div>
             <div>
-                <p className="bio">Bio: </p>
-                <span className="bio user-data">{user.bio}</span>
+                <p className="bio">Bio: <span className="user-data">{user.bio}</span></p>
+                
             </div>
         </div>
     )
