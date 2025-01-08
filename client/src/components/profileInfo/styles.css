@@ -1,0 +1,54 @@
+.profile-info {
+    background: 
+        linear-gradient(var(--c-blue-d2), var(--c-blue), var(--c-blue-d2)), /* Primeiro gradiente */
+        linear-gradient(90deg, var(--c-blue-d2), var(--c-blue), var(--c-blue-d2)); /* Segundo gradiente */
+    background-blend-mode: screen; /* Define como as cores dos gradientes interagem */
+    position: relative;
+    height: calc(60% - 60px);
+    padding: 50px 5vw;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.profile-info > div {
+    background-color: #fff;
+    flex: 1;
+    padding: 30px 0 10px;
+    display: flex;
+    flex-direction: column;
+    border: none;
+    border-radius: 15px;
+}
+
+.profile-info > div:first-child {
+    padding-left: 80px;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.profile-info > div:last-child {
+    padding-right: 80px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.profile-info > div > p, .profile-info > div > span {
+    flex: 1;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--c-blue-d3)
+}
+
+.profile-info .user-data {
+    font-weight: normal;
+    color: black;
+    margin: 0 0 20px 5%;
+}
+
+.profile-info > div > p.bio {
+    flex: 0;
+    margin-bottom: 20px;
+}

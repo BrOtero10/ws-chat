@@ -1,4 +1,5 @@
 import ProfileImage from "../components/profileImage";
+import ProfileInfo from "../components/profileInfo";
 import Toolbar from "../components/toolbar";
 
 export default function MyProfile() {
@@ -9,6 +10,7 @@ export default function MyProfile() {
         <Toolbar onTab="my_profile"/>
         <div className="my-profile-page">
             <ProfileImage />
+            <ProfileInfo />
         </div>
         </>
     )
