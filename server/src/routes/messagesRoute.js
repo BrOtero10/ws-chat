@@ -3,23 +3,9 @@ const router = express.Router();
 
 const messagesControllers = require("../controllers/messagesController");
 
-// Rota para obter todas as mensagens
-router.get('/messages', messagesControllers.getMessages);
-
-// Rota para obter uma mensagem específica
-router.get('/messages/:id', messagesControllers.getMessage);
-
-// router.get('/messages/:fromId/:toId', messagesControllers.getMessagesByUsersId);
-
-router.get('/messages/:userOneId/:userTwoId', messagesControllers.getMessagesOfPersonalChat);
-
-// Rota para criar uma nova mensagem
-router.post('/messages', messagesControllers.createMessage);
-
-// Rota para atualizar uma mensagem existente
-router.put('/messages/:id', messagesControllers.updateMessage);
-
-// Rota para deletar uma mensagem
-router.delete('/messages/:id', messagesControllers.deleteMessage);
+router.get('/message/:sender/:recipient/:timestamp', messagesControllers.getMessage);
+router.get('/chat-messages/:sender/:recipient', messagesControllers.getChatMessages);
+router.post('/message', messagesControllers.createMessage);
+router.delete('/messages/:sender/:recipient/:timestamp', messagesControllers.deleteMessage);
 
 module.exports = router;

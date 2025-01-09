@@ -1,69 +1,43 @@
-const fs = require('fs');
-const path = require('path');
-const saveData = require('../utils/saveData');
-
-const filePath = path.join(__dirname, '../data/friends.json');
-let friendsData = require(filePath);
-
-// Função para obter todos os amigos
-function getFriends() {
-    return friendsData;
-}
+const executeQuery = require('../utils/executeQuery');
 
 // Função para obter os amigos de um usuário específico
-function getUserFriends(userId) {
-    const user = friendsData.find(friend => friend.user === userId);
-    return user ? user.friends : [];
+async function getUserFriends(userId) {
+    const userFriends = await executeQuery(`
+        SELECT friend_id FROM friends WHERE user_id = ?
+        UNION
+        SELECT user_id FROM friends WHERE friend_id = ?;
+    `, [userId, userId]);
+    return userFriends;
 }
 
-// Função para adicionar um novo usuário com lista de amigos
-function createUserFriends(newUserFriends) {
-    friendsData.push(newUserFriends);
-    saveData(filePath, friendsData);
+async function createFriendshipSolicitation(userId, friendId) {
+    const queryStatus = await executeQuery(`
+        INSERT INTO friends
+        ( user_id, friend_id ) VALUES
+        ( ?, ? );
+    `, [userId, friendId]);
+    return queryStatus;
 }
 
-// Função para atualizar a lista de amigos de um usuário
-function updateUserFriends(userId, updatedFriends) {
-    const index = friendsData.findIndex(friend => friend.user === userId);
-    if (index !== -1) {
-        friendsData[index].friends = updatedFriends;
-        saveData(filePath, friendsData);
-    }
+async function acceptFriendship(userId, friendId) {
+    const queryStatus = await executeQuery(`
+        UPDATE friends SET status = 'aceita'
+        WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
+    `, [userId, friendId]);
+    return queryStatus;
 }
 
-// Função para deletar um usuário e sua lista de amigos
-function deleteUserFriends(userId) {
-    const index = friendsData.findIndex(friend => friend.user === userId);
-    if (index !== -1) {
-        friendsData.splice(index, 1);
-        saveData(filePath, friendsData);
-    }
-}
-
-// Função para adicionar um amigo à lista de um usuário
-function addFriend(userId, friendId) {
-    const user = friendsData.find(friend => friend.user === userId);
-    if (user && !user.friends.includes(friendId)) {
-        user.friends.push(friendId);
-        saveData(filePath, friendsData);
-    }
-}
-
-// Função para remover um amigo da lista de um usuário
-function removeFriend(userId, friendId) {
-    const user = friendsData.find(friend => friend.user === userId);
-    if (user) {
-        user.friends = user.friends.filter(id => id !== friendId);
-        saveData(filePath, friendsData);
-    }
+async function deleteFriendship(userId, friendId) {
+    const queryStatus = await executeQuery(`
+        DELETE FROM friends
+        WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
+    `, [userId, friendId]);
+    return queryStatus;
 }
 
 module.exports = {
-    getFriends,
     getUserFriends,
-    createUserFriends,
-    updateUserFriends,
-    deleteUserFriends,
-    addFriend,
-    removeFriend
+    createFriendshipSolicitation,
+    acceptFriendship,
+    deleteFriendship,
 };

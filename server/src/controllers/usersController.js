@@ -1,9 +1,8 @@
 const usersModel = require("../models/usersModel");
-const friendsModel = require("../models/friendsModel");
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
     try {
-        const usersData = usersModel.getUsers();
+        const usersData = await usersModel.getUsers();
         res.status(200).json(usersData);
     } catch (error) {
         console.log("Error - getUsers");
@@ -12,10 +11,10 @@ const getUsers = (req, res) => {
     }
 }
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const userData = usersModel.getUser(id);
+        const userData = await usersModel.getUser(id);
         res.status(200).json(userData);
     } catch (error) {
         console.log("Error - getUser");
@@ -24,10 +23,10 @@ const getUser = (req, res) => {
     }
 }
 
-const getUserByUserName = (req, res) => {
+const getUserByUserName = async (req, res) => {
     try {
         const { username } = req.params;
-        const userData = usersModel.getUserByUsername(username);
+        const userData = await usersModel.getUserByUsername(username);
         res.status(200).json(userData);
     } catch (error) {
         console.log("Error - getUserByUserName");
@@ -36,16 +35,11 @@ const getUserByUserName = (req, res) => {
     }
 }
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     try {
         const newUser = req.body;
-        console.log(newUser);
-        usersModel.createUser(newUser);
-
-        // Criar uma lista de amigos vazia para o novo usuário
-        friendsModel.createUserFriends({ user: newUser.id, friends: [] });
-
-        res.status(201).json({ message: "User created successfully" });
+        const createUserStatus = await usersModel.createUser(newUser);
+        res.status(201).json({ message: "User created successfully", createUserStatus, createFriendsModelStatus });
     } catch (error) {
         console.log("Error - createUser");
         console.error(error);
@@ -53,12 +47,11 @@ const createUser = (req, res) => {
     }
 }
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     try {
-        const { id } = req.params;
         const updatedUser = req.body;
-        usersModel.updateUser(id, updatedUser);
-        res.status(200).json({ message: "User updated successfully" });
+        const updateUserStatus = await usersModel.updateUser(updatedUser);
+        res.status(200).json({ message: "User updated successfully", updateUserStatus });
     } catch (error) {
         console.log("Error - updateUser");
         console.error(error);
@@ -66,11 +59,11 @@ const updateUser = (req, res) => {
     }
 }
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
-        usersModel.deleteUser(id);
-        res.status(200).json({ message: "User deleted successfully" });
+        const deletedUserStatus = await usersModel.deleteUser(id);
+        res.status(200).json({ message: "User deleted successfully", deletedUserStatus });
     } catch (error) {
         console.log("Error - deleteUser");
         console.error(error);
