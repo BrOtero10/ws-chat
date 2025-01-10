@@ -33,6 +33,16 @@ export const getUsersByUsername = async (username) => {
     }
 }
 
+export const login = async (userEmail, userPassword) => {
+    try {
+        const response = await axios.post(`${API_URL}/login`, { userEmail, userPassword });
+        return response.data;
+    } catch (error) {
+        console.error(`Erro ao buscar usuário com username ${userEmail}:`, error);
+        throw error;
+    }
+}
+
 export const createUser = async (userData) => {
     try {
         const response = await axios.post(`${API_URL}/user`, userData);
@@ -43,7 +53,7 @@ export const createUser = async (userData) => {
     }
 };
 
-export const updateUser = async (id, userData) => {
+export const updateUser = async (userData) => {
     try {
         const response = await axios.put(`${API_URL}/user/${id}`, userData);
         return response.data;

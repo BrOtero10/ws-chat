@@ -14,7 +14,7 @@ async function getUser(id) {
         FROM users
         WHERE id = ?
     `, [ id ]);
-    return user;
+    return user[0];
 }
 
 async function getUserByUsername(username) {
@@ -26,7 +26,15 @@ async function getUserByUsername(username) {
     return foundUsers;
 }
 
+async function getUserToLogin(userEmail) {
+    const user = await executeQuery(`
+        SELECT * FROM users WHERE email = ?;
+    `, [userEmail]);
+    return user[0];
+} 
+
 async function createUser(newUser) {
+    console.log("newUser", newUser);
     const { name, email, username, password, birthday, bio } = newUser;
     const queryStatus = await executeQuery(`
         INSERT INTO users
@@ -58,6 +66,7 @@ async function deleteUser(id) {
 module.exports = {
     getUsers,
     getUser,
+    getUserToLogin,
     getUserByUsername,
     createUser,
     updateUser,
