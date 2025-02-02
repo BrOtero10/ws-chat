@@ -1,6 +1,5 @@
 const executeQuery = require('../utils/executeQuery');
 
-// Função para obter os amigos de um usuário específico
 async function getUserFriends(userId) {
     const userFriends = await executeQuery(`
         SELECT friend_id FROM friends WHERE user_id = ?
@@ -10,20 +9,26 @@ async function getUserFriends(userId) {
     return userFriends;
 }
 
-async function createFriendshipSolicitation(userId, friendId) {
+async function getFriendshipSolicitations(userId) {
+    const friendshipSolicitations = await executeQuery(`
+        SELECT 
+    `, [userId])
+}
+
+async function createFriendshipSolicitation(userId, targetId) {
     const queryStatus = await executeQuery(`
         INSERT INTO friends
         ( user_id, friend_id ) VALUES
         ( ?, ? );
-    `, [userId, friendId]);
+    `, [userId, targetId]);
     return queryStatus;
 }
 
-async function acceptFriendship(userId, friendId) {
+async function acceptFriendship(userId, targetId) {
     const queryStatus = await executeQuery(`
         UPDATE friends SET status = 'aceita'
         WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
-    `, [userId, friendId]);
+    `, [userId, targetId]);
     return queryStatus;
 }
 

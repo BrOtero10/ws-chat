@@ -1,40 +1,28 @@
-import axios from 'axios';
+import axios from '../services/axios';
 
-const API_URL = 'http://localhost:2025'; // Altere para a URL da sua API
-
-export const getMessages = async () => {
+export const getMessage = async (sender, recipient, timestamp) => {
     try {
-        const response = await axios.get(`${API_URL}/messages`);
+        const response = await axios.get(`/messages/${sender}/${recipient}/${timestamp}`);
         return response.data;
     } catch (error) {
-        console.error('Erro ao buscar mensagens:', error);
+        console.error(`Erro ao buscar mensagem: `, error);
         throw error;
     }
 };
 
-export const getMessage = async (id) => {
+export const getChatMessages = async (sender, recipient) => {
     try {
-        const response = await axios.get(`${API_URL}/messages/${id}`);
+        const response = await axios.get(`/messages/${sender}/${recipient}`);
         return response.data;
     } catch (error) {
-        console.error(`Erro ao buscar mensagem com ID ${id}:`, error);
-        throw error;
-    }
-};
-
-export const getMessagesOfPersonalChat = async (userOneId, userTwoId) => {
-    try {
-        const response = await axios.get(`${API_URL}/messages/${userOneId}/${userTwoId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Erro ao buscar mensagens entre usuários ${userOneId} e ${userTwoId}:`, error);
+        console.error(`Erro ao buscar mensagens entre usuários ${sender} e ${recipient}: `, error);
         throw error;
     }
 };
 
 export const createMessage = async (messageData) => {
     try {
-        const response = await axios.post(`${API_URL}/messages`, messageData);
+        const response = await axios.post(`/messages`, messageData);
         return response.data;
     } catch (error) {
         console.error('Erro ao criar mensagem:', error);
@@ -42,22 +30,12 @@ export const createMessage = async (messageData) => {
     }
 };
 
-export const updateMessage = async (id, messageData) => {
+export const deleteMessage = async (recipient, timestamp) => {
     try {
-        const response = await axios.put(`${API_URL}/messages/${id}`, messageData);
+        const response = await axios.delete(`/message/${recipient}/${timestamp}`);
         return response.data;
     } catch (error) {
-        console.error(`Erro ao atualizar mensagem com ID ${id}:`, error);
-        throw error;
-    }
-};
-
-export const deleteMessage = async (id) => {
-    try {
-        const response = await axios.delete(`${API_URL}/messages/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Erro ao deletar mensagem com ID ${id}:`, error);
+        console.error(`Erro ao deletar mensagem: `, error);
         throw error;
     }
 };

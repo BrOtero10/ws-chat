@@ -2,7 +2,7 @@ const friendsModel = require("../models/friendsModel");
 
 const getUserFriends = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.userId;
         const userFriends = await friendsModel.getUserFriends(userId);
         res.status(200).json(userFriends);
     } catch (error) {
@@ -14,8 +14,9 @@ const getUserFriends = async (req, res) => {
 
 const createFriendshipSolicitation = async (req, res) => {
     try {
-        const { user_id, friend_id } = req.body;
-        const createdSolicitationsStatus = await friendsModel.createFriendshipSolicitation(user_id, friend_id);
+        const userId = req.userId;
+        const { targetId } = req.body;
+        const createdSolicitationsStatus = await friendsModel.createFriendshipSolicitation(userId, targetId);
         res.status(201).json({ message: "User friends created successfully", createdSolicitationsStatus });
     } catch (error) {
         console.log("Error - createUserFriends");
@@ -26,8 +27,9 @@ const createFriendshipSolicitation = async (req, res) => {
 
 const acceptFriendship = async (req, res) => {
     try {
-        const { userId, friendId } = req.body;
-        const acceptedFriendshipStatus = await friendsModel.acceptFriendship(userId, friendId);
+        const userId = req.userId;
+        const { targetId } = req.body;
+        const acceptedFriendshipStatus = await friendsModel.acceptFriendship(userId, targetId);
         res.status(200).json({ message: "User friends updated successfully", acceptedFriendshipStatus });
     } catch (error) {
         console.log("Error - updateUserFriends");
@@ -38,7 +40,8 @@ const acceptFriendship = async (req, res) => {
 
 const deleteFriendship = async (req, res) => {
     try {
-        const { userId, friendId } = req.params;
+        const userId = req.userId;
+        const { friendId } = req.params;
         const deletedFriendshipStatus = await friendsModel.deleteFriendship(userId, friendId);
         res.status(200).json({ message: "User friends deleted successfully", deletedFriendshipStatus });
     } catch (error) {

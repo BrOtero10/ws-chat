@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const verifyJWT = require('../middlewares/auth');
 
 const messagesControllers = require("../controllers/messagesController");
 
-router.get('/message/:sender/:recipient/:timestamp', messagesControllers.getMessage);
-router.get('/chat-messages/:sender/:recipient', messagesControllers.getChatMessages);
-router.post('/message', messagesControllers.createMessage);
-router.delete('/messages/:sender/:recipient/:timestamp', messagesControllers.deleteMessage);
+router.get('/message/:sender/:recipient/:timestamp', verifyJWT, messagesControllers.getMessage);
+router.get('/chat-messages/:sender/:recipient', verifyJWT, messagesControllers.getChatMessages);
+router.post('/message', verifyJWT, messagesControllers.createMessage);
+router.delete('/message/:recipient/:timestamp', verifyJWT, messagesControllers.deleteMessage);
 
 module.exports = router;

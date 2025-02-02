@@ -1,10 +1,9 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:2025'; // Altere para a URL da sua API
+import axiosWithToken from '../services/axios';
 
 export const getUsers = async () => {
     try {
-        const response = await axios.get(`${API_URL}/users`);
+        const response = await axiosWithToken.get('/users');
         console.log(response)
         return response.data;
     } catch (error) {
@@ -15,7 +14,7 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
     try {
-        const response = await axios.get(`${API_URL}/user/${id}`);
+        const response = await axiosWithToken.get(`/user/${id}`);
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar usuário com ID ${id}:`, error);
@@ -25,7 +24,7 @@ export const getUser = async (id) => {
 
 export const getUsersByUsername = async (username) => {
     try {
-        const response = await axios.get(`${API_URL}/user/username/${username}`);
+        const response = await axiosWithToken.get(`/user/username/${username}`);
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar usuário com username ${username}:`, error);
@@ -35,7 +34,7 @@ export const getUsersByUsername = async (username) => {
 
 export const login = async (userEmail, userPassword) => {
     try {
-        const response = await axios.post(`${API_URL}/login`, { userEmail, userPassword });
+        const response = await axios.post('/api/login', { userEmail, userPassword });
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar usuário com username ${userEmail}:`, error);
@@ -45,7 +44,7 @@ export const login = async (userEmail, userPassword) => {
 
 export const createUser = async (userData) => {
     try {
-        const response = await axios.post(`${API_URL}/user`, userData);
+        const response = await axios.post('/api/user', userData);
         return response.data;
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
@@ -55,20 +54,20 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (userData) => {
     try {
-        const response = await axios.put(`${API_URL}/user/${id}`, userData);
+        const response = await axiosWithToken.put('/user', userData);
         return response.data;
     } catch (error) {
-        console.error(`Erro ao atualizar usuário com ID ${id}:`, error);
+        console.error(`Erro ao atualizar usuário: `, error);
         throw error;
     }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async () => {
     try {
-        const response = await axios.delete(`${API_URL}/user/${id}`);
+        const response = await axiosWithToken.delete('/user');
         return response.data;
     } catch (error) {
-        console.error(`Erro ao deletar usuário com ID ${id}:`, error);
+        console.error(`Erro ao deletar usuário: `, error);
         throw error;
     }
 };

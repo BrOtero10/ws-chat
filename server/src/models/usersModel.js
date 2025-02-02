@@ -35,7 +35,7 @@ async function getUserToLogin(userEmail) {
 
 async function createUser(newUser) {
     console.log("newUser", newUser);
-    const { name, email, username, password, birthday, bio } = newUser;
+    const { name = null, email, username, password, birthday = null, bio = null } = newUser;
     const queryStatus = await executeQuery(`
         INSERT INTO users
         (name, email, username, password, birthday, bio) VALUES

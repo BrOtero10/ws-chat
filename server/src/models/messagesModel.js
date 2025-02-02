@@ -27,6 +27,14 @@ async function createMessage(newMessage) {
     return queryStatus;
 }
 
+async function readMessage(sender, recipient, timestamp) {
+    const queryStatus = await executeQuery(`
+        UPDATE messages SET is_read = 1
+        WHERE sender = ? AND recipient = ? AND timestamp = ?;
+    `, [sender, recipient, timestamp]);
+    return queryStatus;
+}
+
 async function deleteMessage(sender, recipient, timestamp) {
     const queryStatus = await executeQuery(`
         DELETE FROM messages
@@ -39,5 +47,6 @@ module.exports = {
     getMessage,
     getChatMessages,
     createMessage,
+    readMessage,
     deleteMessage,
 };
