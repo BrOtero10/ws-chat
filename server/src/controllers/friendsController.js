@@ -4,6 +4,7 @@ const getUserFriends = async (req, res) => {
     try {
         const userId = req.userId;
         const userFriends = await friendsModel.getUserFriends(userId);
+
         res.status(200).json(userFriends);
     } catch (error) {
         console.log("Error - getUserFriends");
@@ -17,6 +18,7 @@ const createFriendshipSolicitation = async (req, res) => {
         const userId = req.userId;
         const { targetId } = req.body;
         const createdSolicitationsStatus = await friendsModel.createFriendshipSolicitation(userId, targetId);
+
         res.status(201).json({ message: "User friends created successfully", createdSolicitationsStatus });
     } catch (error) {
         console.log("Error - createUserFriends");
@@ -28,8 +30,9 @@ const createFriendshipSolicitation = async (req, res) => {
 const acceptFriendship = async (req, res) => {
     try {
         const userId = req.userId;
-        const { targetId } = req.body;
-        const acceptedFriendshipStatus = await friendsModel.acceptFriendship(userId, targetId);
+        const { requesterId } = req.body;
+        const acceptedFriendshipStatus = await friendsModel.acceptFriendship(userId, requesterId);
+
         res.status(200).json({ message: "User friends updated successfully", acceptedFriendshipStatus });
     } catch (error) {
         console.log("Error - updateUserFriends");
@@ -43,6 +46,7 @@ const deleteFriendship = async (req, res) => {
         const userId = req.userId;
         const { friendId } = req.params;
         const deletedFriendshipStatus = await friendsModel.deleteFriendship(userId, friendId);
+        
         res.status(200).json({ message: "User friends deleted successfully", deletedFriendshipStatus });
     } catch (error) {
         console.log("Error - deleteUserFriends");

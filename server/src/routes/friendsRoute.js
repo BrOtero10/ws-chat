@@ -4,7 +4,6 @@ const verifyJWT = require("../middlewares/auth");
 
 const friendsControllers = require("../controllers/friendsController");
 
-
 router.get('/friends', verifyJWT, friendsControllers.getUserFriends);
 router.post('/friends', verifyJWT, friendsControllers.createFriendshipSolicitation);
 router.put('/friends', verifyJWT, friendsControllers.acceptFriendship);

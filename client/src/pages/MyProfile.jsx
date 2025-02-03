@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { fetchUser } from "../services/users";
 import ProfileImage from "../components/profileImage";
 import ProfileInfo from "../components/profileInfo";
 import Toolbar from "../components/toolbar";
@@ -11,12 +10,12 @@ export default function MyProfile() {
     const [ userData, setUserData ] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await fetchUser(userId);
-            console.log('UserData', data);
-            setUserData(data);
-        }
-        fetchData();
+        // const fetchData = async () => {
+        //     const data = await fetchUser(userId);
+        //     console.log('UserData', data);
+        //     setUserData(data);
+        // }
+        // fetchData();
     }, []);
 
     return (

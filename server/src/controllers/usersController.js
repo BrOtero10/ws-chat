@@ -1,7 +1,7 @@
 const cookieConfig = require("../config/cookie.config");
 const usersModel = require("../models/usersModel");
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 
 const getUsers = async (req, res) => {
     try {
@@ -41,27 +41,30 @@ const getUserByUserName = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { userEmail, userPassword } = req.body;
+
+        // Encontra usuário pelo email
         const userData = await usersModel.getUserToLogin(userEmail);
 
-        if(!userData?.id) {
+        if (!userData?.id) {
             return res.status(200).json({ auth: false, message: "E-mail not registered" });
-        } 
+        }
 
-        bcrypt.compare(userPassword.trim(), userData.password)
-        .then(result => {
-          if (result) {
-            console.log('Senha correta!');
-          } else {
+        // Verifica se a senha está correta
+        const isPasswordCorrect = await argon2.verify(userData.password, userPassword.trim())
+            .catch(error => {
+                console.error('Erro ao comparar a senha: ', error);
+                return false;
+            });
+
+        if (!isPasswordCorrect) {
             return res.status(200).json({ auth: false, message: "Wrong password" });
-          }
-        })
-        .catch(error => console.error('Erro ao comparar a senha: ', error));
+        }
 
         const token = jwt.sign(
-            { userId: userData.ID_COLABORADOR }, cookieConfig.secret, { expiresIn: (cookieConfig.cookie.maxAge / 1000 )}
+            { userId: userData.ID_COLABORADOR }, cookieConfig.secret, { expiresIn: (cookieConfig.cookie.maxAge / 1000) }
         );
 
-        res.status(200).json({ auth: true, message: "Login succeded", token });
+        res.status(200).json({ auth: true, message: "Login succeeded", token });
 
     } catch (error) {
         console.log("Error - login");
@@ -74,25 +77,26 @@ const createUser = async (req, res) => {
     try {
         const newUser = req.body;
 
+        // Verifica se email já foi registrado
         const verifyExistingUser = await usersModel.getUserToLogin(newUser.email);
-        if(verifyExistingUser?.id) {
-            return res.status(400).json({ message: "E-mail already registered"});
-            
+        if (verifyExistingUser?.id) {
+            return res.status(400).json({ message: "E-mail already registered" });
         }
 
-        const saltRounds = 10;
-        const hash = await bcrypt.hash(newUser.password, saltRounds)
+        // Criptografa a senha
+        const hash = await argon2.hash(newUser.password)
             .catch(error => console.error("Error ao criptografar senha: ", error));
-        
+
         newUser.password = hash;
-        
+
         const createUserStatus = await usersModel.createUser(newUser);
-        if( createUserStatus.affectedRows === 1 ) {
+
+        if (createUserStatus.rowsAffected[0] === 1) {
             res.status(201).json({ message: "User created successfully", createUserStatus });
         } else {
             res.status(400).json({ message: "Error on creating User", createUserStatus });
         }
-        
+
     } catch (error) {
         console.log("Error - createUser");
         console.error(error);
@@ -104,7 +108,7 @@ const updateUser = async (req, res) => {
     try {
         const updatedUser = req.body;
         const userId = req.userId;
-        if(updateUser.id != userId) return res.status(401).json({ message: "Can not update another user" });
+        if(updatedUser.id != userId) return res.status(401).json({ message: "Can not update another user" });
 
         const updateUserStatus = await usersModel.updateUser(updatedUser);
         res.status(200).json({ message: "User updated successfully", updateUserStatus });

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { fetchUser } from "../../services/users";
 
 export default function ProfileInfo({ userData }) {
 

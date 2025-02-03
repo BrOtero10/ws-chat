@@ -1,66 +1,96 @@
-const executeQuery = require('../utils/executeQuery');
+const dispatchQuery = require('../utils/dispatchQuery');
 
 async function getUsers() {
-    const usersData = await executeQuery(`
-        SELECT id, name, email, username, birthday, bio 
-        FROM users;
-    `);
-    return usersData;
+    const users = await dispatchQuery(
+        `SELECT id, name, email, username, birthday, bio 
+        FROM BrunoUsers;`
+    )
+
+    return users;
 }
 
 async function getUser(id) {
-    const user = await executeQuery(`
-        SELECT id, name, email, username, birthday, bio
-        FROM users
-        WHERE id = ?
-    `, [ id ]);
-    return user[0];
+    const user = await dispatchQuery(
+        `SELECT id, name, email, username, birthday, bio
+        FROM BrunoUsers
+        WHERE id = @id;`,
+        [ ['id', id] ]
+    );
+
+    return user;
 }
 
 async function getUserByUsername(username) {
-    const foundUsers = await executeQuery(`
-        SELECT  id, name, email, username, birthday, bio
-        FROM users
-        WHERE username = ?
-    `, [ username ]);
-    return foundUsers;
+    const user = await dispatchQuery(
+        `SELECT id, name, email, username, birthday, bio
+        FROM BrunoUsers
+        WHERE username = @username;`,
+        [ ['username', username] ]
+    );
+
+    return user;
 }
 
-async function getUserToLogin(userEmail) {
-    const user = await executeQuery(`
-        SELECT * FROM users WHERE email = ?;
-    `, [userEmail]);
+async function getUserToLogin(email) {
+    const user = await dispatchQuery(
+        `SELECT * FROM BrunoUsers WHERE email = @email;`,
+        [['email', email]]
+    );
+
     return user[0];
-} 
+}
 
 async function createUser(newUser) {
-    console.log("newUser", newUser);
-    const { name = null, email, username, password, birthday = null, bio = null } = newUser;
-    const queryStatus = await executeQuery(`
-        INSERT INTO users
+    const { name, email, username, password, birthday, bio } = newUser;
+
+    const result = await dispatchQuery(
+        `INSERT INTO BrunoUsers
         (name, email, username, password, birthday, bio) VALUES
-        (?, ?, ?, ?, ?, ?);
-    `, [ name, email, username, password, birthday, bio ]);
-    return queryStatus;
+        (@name, @email, @username, @password, @birthday, @bio);`,
+        [
+            ['name', name],
+            ['email', email],
+            ['username', username],
+            ['password', password],
+            ['birthday', birthday],
+            ['bio', bio]
+        ],
+        null
+    );
+
+    return result;
 }
 
 async function updateUser(updatedUser) {
-    const { name, email, username, password, birthday, bio, id } = updatedUser; 
-    const queryStatus = await executeQuery(`
-        UPDATE users
-        SET name = ?, email = ?, username = ?, password = ?, birthday = ?, bio = ?
-        WHERE id = ?
-    `, [ name, email, username, password, birthday, bio, id ]);
-    return queryStatus;
+    const { name, email, username, password, birthday, bio, id } = updatedUser;
+
+    const result = await dispatchQuery(
+        `UPDATE BrunoUsers
+        SET name = @name, email = @email, username = @username, password = @password, birthday = @birthday, bio = @bio
+        WHERE id = @id;`,
+        [ 
+            ['name', name],
+            ['email', email],
+            ['username', username],
+            ['password', password],
+            ['birthday', birthday],
+            ['bio', bio], 
+            ['id', id]
+        ],
+        null
+    );
+    
+    return result;
 }
 
-// Função para deletar um usuário
 async function deleteUser(id) {
-    const queryStatus = await executeQuery(`
-        DELETE FROM users
-        WHERE id = ?
-    `, [ id ]);
-    return queryStatus;
+    const result = await dispatchQuery(
+        `DELETE FROM BrunoUsers WHERE id = @id;`,
+        [ ['id', id] ],
+        null
+    );
+
+    return result;
 }
 
 module.exports = {

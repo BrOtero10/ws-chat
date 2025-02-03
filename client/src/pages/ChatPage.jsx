@@ -4,7 +4,7 @@ import Toolbar from "../components/toolbar";
 import Chat from "../components/chat";
 
 export default function ChatPage() {
-    if(!sessionStorage.getItem('userId')) window.location.href = '/login';
+    // if(!sessionStorage.getItem('access-token')) window.location.href = '/login';
 
     const { friendId } = useParams();
 

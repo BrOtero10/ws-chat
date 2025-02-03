@@ -1,5 +1,4 @@
 import "./styles.css";
-// import { fetchUserFriends } from "../../../services/friends"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchIcon from '/search.svg'
@@ -11,18 +10,18 @@ export default function FriendList() {
     const [ filterString, setFilterString ] = useState("");
 
     useEffect(() => {
-        const fetchFriends = async () => {
-            try {
-                const userId = sessionStorage.getItem("userId");
-                const friends = await fetchUserFriends(userId);
-                setUserFriends(friends);
-                setFilteredFriends(friends);
+        // const fetchFriends = async () => {
+        //     try {
+        //         const userId = sessionStorage.getItem("userId");
+        //         const friends = await fetchUserFriends(userId);
+        //         setUserFriends(friends);
+        //         setFilteredFriends(friends);
 
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchFriends();
+        //     } catch (error) {
+        //         console.error(error);
+        //     }
+        // }
+        // fetchFriends();
     }, []);
     
     const handleFilter = (e) => {

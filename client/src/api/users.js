@@ -35,6 +35,8 @@ export const getUsersByUsername = async (username) => {
 export const login = async (userEmail, userPassword) => {
     try {
         const response = await axios.post('/api/login', { userEmail, userPassword });
+        console.log("API: ", response);
+        alert("!")
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar usuário com username ${userEmail}:`, error);

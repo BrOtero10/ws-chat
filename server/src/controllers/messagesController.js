@@ -20,15 +20,13 @@ const getMessage = async (req, res) => {
 const getChatMessages = async (req, res) => {
     try {
         const userId = req.userId;
-        const { sender, recipient } = req.params;
-        
-        if( sender != userId && recipient != userId) return res.status(401).json("Can not get another users chat messages");
+        const { friendId } = req.params;
 
-        const messagesData = await messagesModel.getChatMessages(sender, recipient);
+        const messagesData = await messagesModel.getChatMessages(userId, friendId);
         res.status(200).json(messagesData);
 
     } catch (error) {
-        console.log("Error - getMessagesOfPersonalChat");
+        console.log("Error - getChatMessages");
         console.error(error);
         res.status(500).json({ message: "Error retrieving messages" });
     }
@@ -54,9 +52,11 @@ const createMessage = async (req, res) => {
 const readMessage = async (req, res) => {
     try {
         const userId = req.userId;
-        const { sender, timestamp } = req.body;
+        const message = req.body;
 
-        const readMessagesStatus = await messagesModel.readMessage(sender, userId, timestamp);
+        if(userId !== message.recipient) return res.status(401).json({ message: "Can not read a message not meant for you" });
+
+        const readMessagesStatus = await messagesModel.readMessage(message);
         res.status(200).json({ message: "Message read sucessfully", readMessagesStatus });
         
     } catch (error) {
@@ -71,7 +71,9 @@ const deleteMessage = async (req, res) => {
         const userId = req.userId;
         const { recipient, timestamp } = req.params;
 
-        const deletedMessageStatus = await messagesModel.deleteMessage(userId, recipient, timestamp);
+        const message = {  sender: userId, recipient, timestamp }
+
+        const deletedMessageStatus = await messagesModel.deleteMessage(message);
         res.status(200).json({ message: "Message deleted successfully", deletedMessageStatus });
 
     } catch (error) {

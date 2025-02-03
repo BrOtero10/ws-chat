@@ -14,6 +14,8 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userEmail, userPassword) => {
     const response = await login(userEmail, userPassword);
     if(response.auth) {
+        console.log("Service: ", response)
+        alert("!")
         sessionStorage.setItem("access-token", response.token)
         return { ok: true };
     } else {

@@ -1,12 +1,6 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
 
-// import { fetchUserFriends } from "../../services/friends";
-// import { fetchUsersByUsername } from "../../services/users";
-// import { fetchFriendSolicitationsFromUser, addFriendSolicitation } from "../../services/friendSolicitations";
-
-
-
 import searchIcon from "/search.svg";
 import infoIcon from "/info.svg";
 import addFriendIcon from "/add-friend.svg";
@@ -27,20 +21,20 @@ export default function FriendList({setUserFilterString}) {
     const [ filterString, setFilterString ] = useState("");
 
     useEffect(() => {
-        const fetchFriends = async () => {
-            try {;
-                const friends = await fetchUserFriends(userId);
-                setUserFriends(friends);
+        // const fetchFriends = async () => {
+        //     try {;
+        //         const friends = await fetchUserFriends(userId);
+        //         setUserFriends(friends);
 
-                const friendSolicitations = await fetchFriendSolicitationsFromUser(userId);
-                setSolicitatedUsers(friendSolicitations);
-                console.log(friendSolicitations)
+        //         const friendSolicitations = await fetchFriendSolicitationsFromUser(userId);
+        //         setSolicitatedUsers(friendSolicitations);
+        //         console.log(friendSolicitations)
 
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchFriends();
+        //     } catch (error) {
+        //         console.error(error);
+        //     }
+        // }
+        // fetchFriends();
     }, []);
 
     useEffect(() => {
@@ -69,38 +63,38 @@ export default function FriendList({setUserFilterString}) {
         }
     };
 
-    const handleFilterBlur = async () => {
-        if(filterString != "") {
-            console.log("Procurando usuários...");
-            const fetchUsers = async () => {
-                try {
-                    let users = await fetchUsersByUsername(filterString);
-                    users = users.filter(user => 
-                        !userFriends.some(friend => 
-                            user.username === friend.username && 
-                            user.email === friend.email
-                        )
-                    );
-                    users = users.filter(user => 
-                        !solicitatedUsers.some(solicitated => 
-                            user.username === solicitated.username && 
-                            user.email === solicitated.email
-                        )
-                    );
-                    users = users.filter(user => user.id !== userId);
+    // const handleFilterBlur = async () => {
+    //     if(filterString != "") {
+    //         console.log("Procurando usuários...");
+    //         const fetchUsers = async () => {
+    //             try {
+    //                 let users = await fetchUsersByUsername(filterString);
+    //                 users = users.filter(user => 
+    //                     !userFriends.some(friend => 
+    //                         user.username === friend.username && 
+    //                         user.email === friend.email
+    //                     )
+    //                 );
+    //                 users = users.filter(user => 
+    //                     !solicitatedUsers.some(solicitated => 
+    //                         user.username === solicitated.username && 
+    //                         user.email === solicitated.email
+    //                     )
+    //                 );
+    //                 users = users.filter(user => user.id !== userId);
 
-                    setMatchingUsers(users);
-                    console.log(users);
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-            fetchUsers();
-        }
-        else {
-            setMatchingUsers([]);
-        }
-    };
+    //                 setMatchingUsers(users);
+    //                 console.log(users);
+    //             } catch (error) {
+    //                 console.error(error);
+    //             }
+    //         }
+    //         fetchUsers();
+    //     }
+    //     else {
+    //         setMatchingUsers([]);
+    //     }
+    // };
 
     const handleKeyPress = async (event) => {
         if (event.key === 'Enter') {

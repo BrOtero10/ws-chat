@@ -1,48 +1,73 @@
-const executeQuery = require('../utils/executeQuery');
+const dispatchQuery = require('../utils/dispatchQuery');
 
 async function getUserFriends(userId) {
-    const userFriends = await executeQuery(`
-        SELECT friend_id FROM friends WHERE user_id = ?
+    const userFriends = await dispatchQuery(
+        `SELECT recipient 
+        FROM BrunoFriends 
+        WHERE requester = @userId AND request_status = 1
         UNION
-        SELECT user_id FROM friends WHERE friend_id = ?;
-    `, [userId, userId]);
+        SELECT requester 
+        FROM BrunoFriends 
+        WHERE recipient = @userId AND request_status = 1;`, 
+        [ ['userId', userId] ]
+    );
     return userFriends;
 }
 
 async function getFriendshipSolicitations(userId) {
-    const friendshipSolicitations = await executeQuery(`
-        SELECT 
-    `, [userId])
+    const friendshipSolicitations = await dispatchQuery(
+        `SELECT * 
+        FROM BrunoFriends 
+        WHERE recipient = @userId AND request_status = 0;`, 
+        [ ['userId', userId] ]
+    );
+    return friendshipSolicitations;
 }
 
 async function createFriendshipSolicitation(userId, targetId) {
-    const queryStatus = await executeQuery(`
-        INSERT INTO friends
-        ( user_id, friend_id ) VALUES
-        ( ?, ? );
-    `, [userId, targetId]);
-    return queryStatus;
+    const result = await dispatchQuery(
+        `INSERT INTO BrunoFriends
+        (requester, recipient) VALUES
+        (@userId, @targetId);`, 
+        [
+            ['userId', userId], 
+            ['targetId', targetId]
+        ],
+        null
+    );
+    return result;
 }
 
-async function acceptFriendship(userId, targetId) {
-    const queryStatus = await executeQuery(`
-        UPDATE friends SET status = 'aceita'
-        WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
-    `, [userId, targetId]);
-    return queryStatus;
+async function acceptFriendship(userId, requesterId) {
+    const result = await dispatchQuery(
+        `UPDATE BrunoFriends 
+        SET request_status = 1
+        WHERE requester = @requesterId AND recipient = @userId;`, 
+        [
+            ['userId', userId],
+            ['requesterId', requesterId]
+        ],
+        null
+    );
+    return result;
 }
 
 async function deleteFriendship(userId, friendId) {
-    const queryStatus = await executeQuery(`
-        DELETE FROM friends
-        WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
-    `, [userId, friendId]);
-    return queryStatus;
-
+    const result = await dispatchQuery(
+        `DELETE FROM BrunoFriends
+        WHERE 
+            (requester = @userId AND recipient = @friendId) 
+            OR 
+            (recipient = @userId AND requester = @friendId);`, 
+        [ ['userId', userId], ['friendId', friendId] ],
+        null
+    );
+    return result;
 }
 
 module.exports = {
     getUserFriends,
+    getFriendshipSolicitations,
     createFriendshipSolicitation,
     acceptFriendship,
     deleteFriendship,
