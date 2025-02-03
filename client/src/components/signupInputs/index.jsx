@@ -1,19 +1,21 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import PasswordInput from '../passwordInput'
-import './styles.css'
-import { addUser } from '../../services/users'
+import './styles.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../services/users';
+import PasswordInput from '../passwordInput';
 
 export default function SignUpInputs() {
     
     const navigate = useNavigate();
 
     const [newUserData, setNewUserData] = useState({
+        name: '',
         username: '',
         birthday: '',
         email: '',
         password: '',
         confirmPassword: '',
+        bio: '',
     })
 
     const handleInputChange = (e) => {
@@ -27,20 +29,20 @@ export default function SignUpInputs() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-
-        if(newUserData.password.trim() !== newUserData.confirmPassword.trim()) {
-            alert("Confirmação de senha incorreta!");
-            return;
+        const response = registerUser(newUserData);
+        if(response.createUserStatus) {
+            navigate("/login");
         }
-
-        const userData = newUserData;
-        delete userData.confirmPassword;
-        await addUser(userData);
-        useNavigate('/login');
     }
 
     return (
         <form className="signup-inputs">
+            <label htmlFor='name'>Insira seu nome</label>
+            <input type="text" className="name-input" name='name'
+                value={newUserData.name} onChange={handleInputChange}
+                autoComplete="off" autoSave='off' required
+            />
+
             <label htmlFor='username'>Insira seu nome de usuário</label>
             <input type="text" className="username-input" name='username'
                 value={newUserData.username} onChange={handleInputChange}

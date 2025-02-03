@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { fetchFriendSolicitationsToUser, acceptFriendSolicitationService, rejectFriendSolicitationService } from "../../services/friendSolicitations";
+// import { fetchFriendSolicitationsToUser, acceptFriendSolicitationService, rejectFriendSolicitationService } from "../../services/friendSolicitations";
 import userImg from "/user.svg"
 
 export default function FriendRequests() {

@@ -1,57 +1,72 @@
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-const saveData = require('../utils/saveData');
+const executeQuery = require('../utils/executeQuery');
 
-const filePath = path.join(__dirname, '../data/users.json');
-let userData = require(filePath);
-
-// Função para obter todos os usuários
-function getUsers() {
-    return userData;
+async function getUsers() {
+    const usersData = await executeQuery(`
+        SELECT id, name, email, username, birthday, bio 
+        FROM users;
+    `);
+    return usersData;
 }
 
-// Função para obter um usuário específico
-function getUser(id) {
-    const user = userData.find(user => user.id === id);
-    return user;
+async function getUser(id) {
+    const user = await executeQuery(`
+        SELECT id, name, email, username, birthday, bio
+        FROM users
+        WHERE id = ?
+    `, [ id ]);
+    return user[0];
 }
 
-function getUserByUsername(username) {
-    const foundUsers = userData.filter(user => user.username.includes(username));
-    // for(user of foundUsers) {
-    //     delete user.password;
-    // }
+async function getUserByUsername(username) {
+    const foundUsers = await executeQuery(`
+        SELECT  id, name, email, username, birthday, bio
+        FROM users
+        WHERE username = ?
+    `, [ username ]);
     return foundUsers;
 }
 
-// Função para criar um novo usuário
-function createUser(newUser) {
-    newUser.id = uuidv4(); // Gerar um ID único
-    userData.push(newUser);
-    saveData(filePath, userData);
+async function getUserToLogin(userEmail) {
+    const user = await executeQuery(`
+        SELECT * FROM users WHERE email = ?;
+    `, [userEmail]);
+    return user[0];
+} 
+
+async function createUser(newUser) {
+    console.log("newUser", newUser);
+    const { name = null, email, username, password, birthday = null, bio = null } = newUser;
+    const queryStatus = await executeQuery(`
+        INSERT INTO users
+        (name, email, username, password, birthday, bio) VALUES
+        (?, ?, ?, ?, ?, ?);
+    `, [ name, email, username, password, birthday, bio ]);
+    return queryStatus;
 }
 
-// Função para atualizar um usuário existente
-function updateUser(id, updatedUser) {
-    const index = userData.findIndex(user => user.id === id);
-    if (index !== -1) {
-        userData[index] = { ...userData[index], ...updatedUser };
-        saveData(filePath, userData);
-    }
+async function updateUser(updatedUser) {
+    const { name, email, username, password, birthday, bio, id } = updatedUser; 
+    const queryStatus = await executeQuery(`
+        UPDATE users
+        SET name = ?, email = ?, username = ?, password = ?, birthday = ?, bio = ?
+        WHERE id = ?
+    `, [ name, email, username, password, birthday, bio, id ]);
+    return queryStatus;
 }
 
 // Função para deletar um usuário
-function deleteUser(id) {
-    const index = userData.findIndex(user => user.id === id);
-    if (index !== -1) {
-        userData.splice(index, 1);
-        saveData(filePath, userData);
-    }
+async function deleteUser(id) {
+    const queryStatus = await executeQuery(`
+        DELETE FROM users
+        WHERE id = ?
+    `, [ id ]);
+    return queryStatus;
 }
 
 module.exports = {
     getUsers,
     getUser,
+    getUserToLogin,
     getUserByUsername,
     createUser,
     updateUser,

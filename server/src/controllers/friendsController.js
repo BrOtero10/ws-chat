@@ -1,20 +1,9 @@
 const friendsModel = require("../models/friendsModel");
 
-const getFriends = (req, res) => {
+const getUserFriends = async (req, res) => {
     try {
-        const friendsData = friendsModel.getFriends();
-        res.status(200).json(friendsData);
-    } catch (error) {
-        console.log("Error - getFriends");
-        console.error(error);
-        res.status(500).json({ message: "Error retrieving friends data" });
-    }
-}
-
-const getUserFriends = (req, res) => {
-    try {
-        const { userId } = req.params;
-        const userFriends = friendsModel.getUserFriends(userId);
+        const userId = req.userId;
+        const userFriends = await friendsModel.getUserFriends(userId);
         res.status(200).json(userFriends);
     } catch (error) {
         console.log("Error - getUserFriends");
@@ -23,11 +12,12 @@ const getUserFriends = (req, res) => {
     }
 }
 
-const createUserFriends = (req, res) => {
+const createFriendshipSolicitation = async (req, res) => {
     try {
-        const newUserFriends = req.body;
-        friendsModel.createUserFriends(newUserFriends);
-        res.status(201).json({ message: "User friends created successfully" });
+        const userId = req.userId;
+        const { targetId } = req.body;
+        const createdSolicitationsStatus = await friendsModel.createFriendshipSolicitation(userId, targetId);
+        res.status(201).json({ message: "User friends created successfully", createdSolicitationsStatus });
     } catch (error) {
         console.log("Error - createUserFriends");
         console.error(error);
@@ -35,12 +25,12 @@ const createUserFriends = (req, res) => {
     }
 }
 
-const updateUserFriends = (req, res) => {
+const acceptFriendship = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const updatedFriends = req.body.friends;
-        friendsModel.updateUserFriends(userId, updatedFriends);
-        res.status(200).json({ message: "User friends updated successfully" });
+        const userId = req.userId;
+        const { targetId } = req.body;
+        const acceptedFriendshipStatus = await friendsModel.acceptFriendship(userId, targetId);
+        res.status(200).json({ message: "User friends updated successfully", acceptedFriendshipStatus });
     } catch (error) {
         console.log("Error - updateUserFriends");
         console.error(error);
@@ -48,11 +38,12 @@ const updateUserFriends = (req, res) => {
     }
 }
 
-const deleteUserFriends = (req, res) => {
+const deleteFriendship = async (req, res) => {
     try {
-        const { userId } = req.params;
-        friendsModel.deleteUserFriends(userId);
-        res.status(200).json({ message: "User friends deleted successfully" });
+        const userId = req.userId;
+        const { friendId } = req.params;
+        const deletedFriendshipStatus = await friendsModel.deleteFriendship(userId, friendId);
+        res.status(200).json({ message: "User friends deleted successfully", deletedFriendshipStatus });
     } catch (error) {
         console.log("Error - deleteUserFriends");
         console.error(error);
@@ -60,38 +51,9 @@ const deleteUserFriends = (req, res) => {
     }
 }
 
-const addFriend = (req, res) => {
-    try {
-        const { userId } = req.params;
-        const { friendId } = req.body;
-        friendsModel.addFriend(userId, friendId);
-        res.status(200).json({ message: "Friend added successfully" });
-    } catch (error) {
-        console.log("Error - addFriend");
-        console.error(error);
-        res.status(500).json({ message: "Error adding friend" });
-    }
-}
-
-const removeFriend = (req, res) => {
-    try {
-        const { userId } = req.params;
-        const { friendId } = req.body;
-        friendsModel.removeFriend(userId, friendId);
-        res.status(200).json({ message: "Friend removed successfully" });
-    } catch (error) {
-        console.log("Error - removeFriend");
-        console.error(error);
-        res.status(500).json({ message: "Error removing friend" });
-    }
-}
-
 module.exports = {
-    getFriends,
     getUserFriends,
-    createUserFriends,
-    updateUserFriends,
-    deleteUserFriends,
-    addFriend,
-    removeFriend
+    createFriendshipSolicitation,
+    acceptFriendship,
+    deleteFriendship,
 };

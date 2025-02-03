@@ -1,8 +1,8 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
-import { fetchUserFriends } from "../../services/friends";
-import { fetchUsersByUsername } from "../../services/users";
-import { fetchFriendSolicitationsFromUser, addFriendSolicitation } from "../../services/friendSolicitations";
+// import { fetchUserFriends } from "../../services/friends";
+// import { fetchUsersByUsername } from "../../services/users";
+// import { fetchFriendSolicitationsFromUser, addFriendSolicitation } from "../../services/friendSolicitations";
 import searchIcon from "/search.svg";
 import infoIcon from "/info.svg";
 import addFriendIcon from "/add-friend.svg";
