@@ -2,7 +2,7 @@ import './styles.css';
 import { useState } from "react";
 import PasswordInput from "../passwordInput";
 import { useNavigate } from 'react-router-dom';
-import { login } from "../../services/users";
+import { loginUser } from '../../services/users';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 
 export default function LoginInputs() {
@@ -13,14 +13,13 @@ export default function LoginInputs() {
     const [passwordValue, setPasswordValue] = useState('');
 
     const verifyLogin = async () => {
-        const response = await login(emailValue, passwordValue);
+        const response = await loginUser(emailValue, passwordValue);
 
         if(response.ok) {
             const userId = sessionStorage.getItem('userId');
             setUserId(userId);
             navigate('/chat');
         }
-        else alert(response.message);
     }
 
     return (

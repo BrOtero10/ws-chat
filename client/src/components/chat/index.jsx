@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { fetchMessagesOfPersonalChat } from "../../services/messages";
+// import { fetchMessagesOfPersonalChat } from "../../services/messages";
 import Messages from "./messages";
 import DetailsBar from "./detailsBar";
 

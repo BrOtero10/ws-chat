@@ -1,5 +1,5 @@
 import "./styles.css";
-import { fetchUserFriends } from "../../../services/friends"
+// import { fetchUserFriends } from "../../../services/friends"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchIcon from '/search.svg'

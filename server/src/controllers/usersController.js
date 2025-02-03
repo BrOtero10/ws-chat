@@ -1,9 +1,11 @@
+const cookieConfig = require("../config/cookie.config");
 const usersModel = require("../models/usersModel");
-const friendsModel = require("../models/friendsModel");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
     try {
-        const usersData = usersModel.getUsers();
+        const usersData = await usersModel.getUsers();
         res.status(200).json(usersData);
     } catch (error) {
         console.log("Error - getUsers");
@@ -12,10 +14,10 @@ const getUsers = (req, res) => {
     }
 }
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const userData = usersModel.getUser(id);
+        const userData = await usersModel.getUser(id);
         res.status(200).json(userData);
     } catch (error) {
         console.log("Error - getUser");
@@ -24,10 +26,10 @@ const getUser = (req, res) => {
     }
 }
 
-const getUserByUserName = (req, res) => {
+const getUserByUserName = async (req, res) => {
     try {
         const { username } = req.params;
-        const userData = usersModel.getUserByUsername(username);
+        const userData = await usersModel.getUserByUsername(username);
         res.status(200).json(userData);
     } catch (error) {
         console.log("Error - getUserByUserName");
@@ -36,16 +38,61 @@ const getUserByUserName = (req, res) => {
     }
 }
 
-const createUser = (req, res) => {
+const login = async (req, res) => {
+    try {
+        const { userEmail, userPassword } = req.body;
+        const userData = await usersModel.getUserToLogin(userEmail);
+
+        if(!userData?.id) {
+            return res.status(200).json({ auth: false, message: "E-mail not registered" });
+        } 
+
+        bcrypt.compare(userPassword.trim(), userData.password)
+        .then(result => {
+          if (result) {
+            console.log('Senha correta!');
+          } else {
+            return res.status(200).json({ auth: false, message: "Wrong password" });
+          }
+        })
+        .catch(error => console.error('Erro ao comparar a senha: ', error));
+
+        const token = jwt.sign(
+            { userId: userData.ID_COLABORADOR }, cookieConfig.secret, { expiresIn: (cookieConfig.cookie.maxAge / 1000 )}
+        );
+
+        res.status(200).json({ auth: true, message: "Login succeded", token });
+
+    } catch (error) {
+        console.log("Error - login");
+        console.error(error);
+        res.status(500).json({ message: "Error on login" });
+    }
+}
+
+const createUser = async (req, res) => {
     try {
         const newUser = req.body;
-        console.log(newUser);
-        usersModel.createUser(newUser);
 
-        // Criar uma lista de amigos vazia para o novo usuário
-        friendsModel.createUserFriends({ user: newUser.id, friends: [] });
+        const verifyExistingUser = await usersModel.getUserToLogin(newUser.email);
+        if(verifyExistingUser?.id) {
+            return res.status(400).json({ message: "E-mail already registered"});
+            
+        }
 
-        res.status(201).json({ message: "User created successfully" });
+        const saltRounds = 10;
+        const hash = await bcrypt.hash(newUser.password, saltRounds)
+            .catch(error => console.error("Error ao criptografar senha: ", error));
+        
+        newUser.password = hash;
+        
+        const createUserStatus = await usersModel.createUser(newUser);
+        if( createUserStatus.affectedRows === 1 ) {
+            res.status(201).json({ message: "User created successfully", createUserStatus });
+        } else {
+            res.status(400).json({ message: "Error on creating User", createUserStatus });
+        }
+        
     } catch (error) {
         console.log("Error - createUser");
         console.error(error);
@@ -53,12 +100,14 @@ const createUser = (req, res) => {
     }
 }
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     try {
-        const { id } = req.params;
         const updatedUser = req.body;
-        usersModel.updateUser(id, updatedUser);
-        res.status(200).json({ message: "User updated successfully" });
+        const userId = req.userId;
+        if(updateUser.id != userId) return res.status(401).json({ message: "Can not update another user" });
+
+        const updateUserStatus = await usersModel.updateUser(updatedUser);
+        res.status(200).json({ message: "User updated successfully", updateUserStatus });
     } catch (error) {
         console.log("Error - updateUser");
         console.error(error);
@@ -66,11 +115,12 @@ const updateUser = (req, res) => {
     }
 }
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
-        usersModel.deleteUser(id);
-        res.status(200).json({ message: "User deleted successfully" });
+        const userId = req.userId;
+        const deletedUserStatus = await usersModel.deleteUser(userId);
+
+        res.status(200).json({ message: "User deleted successfully", deletedUserStatus });
     } catch (error) {
         console.log("Error - deleteUser");
         console.error(error);
@@ -82,6 +132,7 @@ module.exports = {
     getUsers,
     getUser,
     getUserByUserName,
+    login,
     createUser,
     updateUser,
     deleteUser
