@@ -64,7 +64,7 @@ export const addFriend = async (userId, friendData) => {
 
 export const removeFriend = async (userId, friendData) => {
     try {
-        const response = await axios.post(`${API_URL}/friends/${userId}/remove`, friendData);
+        const response = await axios.post(`${API_URL}/friends/${userId}/remove`, {friendId: friendData});
         return response.data;
     } catch (error) {
         console.error(`Erro ao remover amigo da lista do usuário com ID ${userId}:`, error);

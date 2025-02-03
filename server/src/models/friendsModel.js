@@ -51,9 +51,12 @@ function addFriend(userId, friendId) {
 
 // Função para remover um amigo da lista de um usuário
 function removeFriend(userId, friendId) {
+    console.log(friendId);
     const user = friendsData.find(friend => friend.user === userId);
     if (user) {
+        console.log('before: ', user);
         user.friends = user.friends.filter(id => id !== friendId);
+        console.log('after: ', user)
         saveData(filePath, friendsData);
     }
 }
