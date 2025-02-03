@@ -38,6 +38,7 @@ async function deleteFriendship(userId, friendId) {
         WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?);
     `, [userId, friendId]);
     return queryStatus;
+
 }
 
 module.exports = {

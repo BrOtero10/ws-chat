@@ -1,14 +1,19 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
+
 // import { fetchUserFriends } from "../../services/friends";
 // import { fetchUsersByUsername } from "../../services/users";
 // import { fetchFriendSolicitationsFromUser, addFriendSolicitation } from "../../services/friendSolicitations";
+
+
+
 import searchIcon from "/search.svg";
 import infoIcon from "/info.svg";
 import addFriendIcon from "/add-friend.svg";
 import removeFriendIcon from "/remove-friend.svg";
 
 export default function FriendList({setUserFilterString}) {
+    const navigate = useNavigate();
     const userId = sessionStorage.getItem('userId');
 
     const [ userFriends, setUserFriends ] = useState([]);
@@ -112,6 +117,11 @@ export default function FriendList({setUserFilterString}) {
         await addFriendSolicitation(solicitationData);
     }
 
+    const removeFriend = async (targetId) => {
+        await removeFriendFromUser(userId, targetId);
+        console.log(targetId, 'removido')
+    }
+
     return (
         <div className="friend-list">
             <div className="search-friend">
@@ -128,8 +138,12 @@ export default function FriendList({setUserFilterString}) {
                         <div key={`friend-${friend.username}/${index}`}> 
                             <span className="username">{ friend.username } </span>
                             {/* <span className="common-friends">XXX amigos em comum</span> */}
-                            <span className="info"><img src={infoIcon}/></span>
-                            <span className="remove" title="Remover amizade"><img src={removeFriendIcon}/></span>
+                            <span className="info"
+                                onClick={() => navigate(`/profile/${friend.id}`)}
+                            ><img src={infoIcon}/></span>
+                            <span className="remove" title="Remover amizade"
+                                onClick={() => removeFriend(friend.id)}
+                            ><img src={removeFriendIcon}/></span>
                         </div>
                     )}
                 </div>
@@ -141,7 +155,9 @@ export default function FriendList({setUserFilterString}) {
                     { filteredSolicitaded.map((solicitaded, index) => 
                         <div key={`solicitaded-${solicitaded.username}/${index}`}> 
                             <span className="username">{ solicitaded.username } </span>
-                            <span className="info"><img src={infoIcon}/></span>
+                            <span className="info"
+                                onClick={() => navigate(`/profile/${solicitaded.id}`)}
+                            ><img src={infoIcon}/></span>
                         </div>
                     )}
                 </div>
@@ -154,7 +170,9 @@ export default function FriendList({setUserFilterString}) {
                         <div key={`friend-${user.username}/${index}`}> 
                             <span className="username">{ user.username } </span>
                             <span className="common-friends">XXX amigos em comum</span>
-                            <span className="info"><img src={infoIcon}/></span>
+                            <span className="info"
+                                onClick={() => navigate(`/profile/${user.id}`)}
+                            ><img src={infoIcon}/></span>
                             <span className="add" title="Enviar solicitação de amizade"
                                 onClick={() => createFriendSolicitation(user.id)}
                             ><img src={addFriendIcon}/></span>
