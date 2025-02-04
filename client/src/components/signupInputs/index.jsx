@@ -9,13 +9,13 @@ export default function SignUpInputs() {
     const navigate = useNavigate();
 
     const [newUserData, setNewUserData] = useState({
-        name: '',
+        // name: '',
         username: '',
-        birthday: '',
+        // birthday: '',
         email: '',
         password: '',
         confirmPassword: '',
-        bio: '',
+        // bio: '',
     })
 
     const handleInputChange = (e) => {
@@ -37,11 +37,11 @@ export default function SignUpInputs() {
 
     return (
         <form className="signup-inputs">
-            <label htmlFor='name'>Insira seu nome</label>
+            {/* <label htmlFor='name'>Insira seu nome</label>
             <input type="text" className="name-input" name='name'
                 value={newUserData.name} onChange={handleInputChange}
                 autoComplete="off" autoSave='off' required
-            />
+            /> */}
 
             <label htmlFor='username'>Insira seu nome de usuário</label>
             <input type="text" className="username-input" name='username'
@@ -49,10 +49,10 @@ export default function SignUpInputs() {
                 autoComplete="off" autoSave='off' required
             />
 
-            <label htmlFor='birthday'>Insira sua data de nascimento</label>
+            {/* <label htmlFor='birthday'>Insira sua data de nascimento</label>
             <input type='date' name='birthday' autoSave='off'
                 value={newUserData.birthday} onChange={handleInputChange} required
-            />
+            /> */}
 
             <label htmlFor='email'>Insira seu email</label>
             <input type="text" className="email-input" name='email'

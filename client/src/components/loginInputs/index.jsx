@@ -16,8 +16,8 @@ export default function LoginInputs() {
         const response = await loginUser(emailValue, passwordValue);
 
         if(response.ok) {
-            const userId = sessionStorage.getItem('userId');
-            setUserId(userId);
+            setUserId(response.id);
+            sessionStorage.setItem('userId', response.id)
             navigate('/chat');
         }
     }

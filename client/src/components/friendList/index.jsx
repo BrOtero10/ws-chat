@@ -1,13 +1,18 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import searchIcon from "/search.svg";
 import infoIcon from "/info.svg";
 import addFriendIcon from "/add-friend.svg";
 import removeFriendIcon from "/remove-friend.svg";
+import { createFriendshipSolicitation, deleteFriendship } from "../../api/friends";
+import { getUsersByUsername } from "../../api/users";
+import { fetchFriendshipSolicitationsFromUser, fetchUserFriends } from "../../services/friends";
 
 export default function FriendList({setUserFilterString}) {
     const navigate = useNavigate();
+
     const userId = sessionStorage.getItem('userId');
 
     const [ userFriends, setUserFriends ] = useState([]);
@@ -21,32 +26,43 @@ export default function FriendList({setUserFilterString}) {
     const [ filterString, setFilterString ] = useState("");
 
     useEffect(() => {
-        // const fetchFriends = async () => {
-        //     try {;
-        //         const friends = await fetchUserFriends(userId);
-        //         setUserFriends(friends);
+        const fetchFriends = async () => {
+            try {
+                const friends = await fetchUserFriends();
+                console.log('friends ', friends)
+                setUserFriends(friends);
 
-        //         const friendSolicitations = await fetchFriendSolicitationsFromUser(userId);
-        //         setSolicitatedUsers(friendSolicitations);
-        //         console.log(friendSolicitations)
+                const friendSolicitations = await fetchFriendshipSolicitationsFromUser();
+                setSolicitatedUsers(friendSolicitations);
 
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // }
-        // fetchFriends();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchFriends();
     }, []);
 
     useEffect(() => {
-        setFilteredFriends ( 
-            userFriends.filter(friend => friend.username.includes(filterString)) 
-        )
+        if(filterString === "") {
+            setFilteredFriends(userFriends)
+        }
+        else {
+            setFilteredFriends ( 
+                userFriends.filter(friend => friend?.username.toLowerCase().includes(filterString.toLowerCase())) 
+            )
+        }
+        
     }, [userFriends, filterString]);
 
     useEffect(() => {
-        setFilterSolicitaded ( 
-            solicitatedUsers.filter(friend => friend.username.includes(filterString)) 
-        )
+        if(filterString === "") {
+            setFilterSolicitaded(solicitatedUsers)
+        }
+        else {
+            setFilterSolicitaded ( 
+                solicitatedUsers.filter(friend => friend?.username.toLowerCase().includes(filterString.toLowerCase())) 
+            )
+        }
     }, [solicitatedUsers, filterString]);
 
     const handleFilter = (e) => {
@@ -57,44 +73,44 @@ export default function FriendList({setUserFilterString}) {
         }
         else {
             const filteredUserFriends = userFriends.filter(
-                friend => friend.username.includes(e.target.value)
+                friend => friend?.username.toLowerCase().includes(e.target.value.toLowerCase())
             );
             setFilteredFriends(filteredUserFriends);
         }
     };
 
-    // const handleFilterBlur = async () => {
-    //     if(filterString != "") {
-    //         console.log("Procurando usuários...");
-    //         const fetchUsers = async () => {
-    //             try {
-    //                 let users = await fetchUsersByUsername(filterString);
-    //                 users = users.filter(user => 
-    //                     !userFriends.some(friend => 
-    //                         user.username === friend.username && 
-    //                         user.email === friend.email
-    //                     )
-    //                 );
-    //                 users = users.filter(user => 
-    //                     !solicitatedUsers.some(solicitated => 
-    //                         user.username === solicitated.username && 
-    //                         user.email === solicitated.email
-    //                     )
-    //                 );
-    //                 users = users.filter(user => user.id !== userId);
+    const handleFilterBlur = async () => {
+        if(filterString != "") {
+            console.log("Procurando usuários...");
+            const fetchUsers = async () => {
+                try {
+                    let users = await getUsersByUsername(filterString);
+                    users = users.filter(user => 
+                        !userFriends.some(friend => 
+                            user.username === friend.username && 
+                            user.email === friend.email
+                        )
+                    );
+                    users = users.filter(user => 
+                        !solicitatedUsers.some(solicitated => 
+                            user.username === solicitated.username && 
+                            user.email === solicitated.email
+                        )
+                    );
+                    users = users.filter(user => user.id != userId);
 
-    //                 setMatchingUsers(users);
-    //                 console.log(users);
-    //             } catch (error) {
-    //                 console.error(error);
-    //             }
-    //         }
-    //         fetchUsers();
-    //     }
-    //     else {
-    //         setMatchingUsers([]);
-    //     }
-    // };
+                    setMatchingUsers(users);
+                    console.log(users);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            fetchUsers();
+        }
+        else {
+            setMatchingUsers([]);
+        }
+    };
 
     const handleKeyPress = async (event) => {
         if (event.key === 'Enter') {
@@ -102,17 +118,13 @@ export default function FriendList({setUserFilterString}) {
         }
     };
 
-    const createFriendSolicitation = async (targetId) => {
-        const solicitationData = {
-            from: userId,
-            to: targetId
-        };
-
-        await addFriendSolicitation(solicitationData);
+    const fetchCreateFriendSolicitation = async (targetId) => {
+        console.log('enviado!')
+        await createFriendshipSolicitation(targetId);
     }
 
     const removeFriend = async (targetId) => {
-        await removeFriendFromUser(userId, targetId);
+        await deleteFriendship(targetId);
         console.log(targetId, 'removido')
     }
 
@@ -152,6 +164,9 @@ export default function FriendList({setUserFilterString}) {
                             <span className="info"
                                 onClick={() => navigate(`/profile/${solicitaded.id}`)}
                             ><img src={infoIcon}/></span>
+                            <span className="remove" title="Remover solicitação de amizade"
+                                onClick={() => removeFriend(solicitaded.id)}
+                            ><img src={removeFriendIcon}/></span>
                         </div>
                     )}
                 </div>
@@ -168,7 +183,7 @@ export default function FriendList({setUserFilterString}) {
                                 onClick={() => navigate(`/profile/${user.id}`)}
                             ><img src={infoIcon}/></span>
                             <span className="add" title="Enviar solicitação de amizade"
-                                onClick={() => createFriendSolicitation(user.id)}
+                                onClick={() => fetchCreateFriendSolicitation(user.id)}
                             ><img src={addFriendIcon}/></span>
                         </div>
                     )}

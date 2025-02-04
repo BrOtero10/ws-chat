@@ -1,30 +1,60 @@
 import { useEffect, useState } from "react";
+import penIcon from '/pen-icon.svg';
 import "./styles.css";
 
-export default function ProfileInfo({ userData }) {
+export default function ProfileInfo({ userData, editable = false }) {
 
-    const user = {
-        name: "Bruno Otero",
-        age: 20,
-        birthday: '2004-12-10',
-        bio: 'Sou um jovem de 20 anos, estudante de Análise e Desenvolvimento de Sistemas, pelo Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, campus Pirituba.'
-    }
+    const [ isEditing, setIsEditing ] = useState(false);
 
-    function formatDate(date) {
-        const splitedData = date.split('-');
+    const [editValues, setEditValues] = useState({
+        name: userData?.name,
+        birthday: userData?.birthday.split('T')[0],
+        bio: userData?.bio
+    })
+
+    useEffect(() => {
+        setEditValues({
+            name: userData?.name,
+            birthday: userData?.birthday.split('T')[0],
+            bio: userData?.bio
+        })
+    }, [userData])
+
+    const handleEdit = (e) => {
+        console.log(e.target.value)
+        setEditValues(prev => {
+            return {
+                ...prev, [e.target.name]: e.target.value
+            }
+        })
+    } 
+
+    function formatDate(date = '') {
+        const splitedData = date.split('T')[0].split('-');
         return `${splitedData[2] < 10 ? `0${splitedData[2]}` : splitedData[2]}/${splitedData[1] < 10 ? `0${splitedData[1]}` : splitedData[1]}/${splitedData[0]}`
     }
 
     return (
         <div className="profile-info">
             <div>
-                <p className="name">Nome: <span className="user-data">{user.name}</span></p>
-                <p className="age">Idade: <span className="user-data">{user.age}</span></p>
-                <p className="birthday">Data de nascimento: <span className="user-data">{formatDate(userData?.birthday || "")}</span></p>     
+                <p className="name">Nome: 
+                    { isEditing ? <input name="name" value={editValues.name} onChange={handleEdit} />
+                    : <span className="user-data">{userData?.name}</span> }
+                </p>
+                <p className="birthday">Data de nascimento: 
+                    { isEditing ? <input type="date" name="birthday" value={editValues.birthday} onChange={handleEdit} />
+                    : <span className="user-data">{formatDate(userData?.birthday)}</span> }
+                </p>     
            </div>
-            <div>
-                <p className="bio">Bio: <span className="user-data">{user.bio}</span></p>
-                
+            <div style={{ position: 'relative' }}>
+                <p className="bio">Bio: 
+                    { isEditing ? <textarea name="bio" value={editValues.bio} onChange={handleEdit} />
+                    : <span className="user-data">{userData?.bio}</span> }
+                </p>
+                { editable && 
+                    isEditing ? <FaCheck /> 
+                    : <img className="edit" src={penIcon} onClick={() => setIsEditing(!isEditing)}/> 
+                }
             </div>
         </div>
     )

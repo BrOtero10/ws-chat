@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import ProfileImage from "../components/profileImage";
 import ProfileInfo from "../components/profileInfo";
 import Toolbar from "../components/toolbar";
+import { getUserByToken } from "../api/users";
 
 export default function MyProfile() {
-    const userId = sessionStorage.getItem('userId');
-    if(!userId) window.location.href = '/login';
+    if(!sessionStorage.getItem('access-token')) window.location.href = '/login';
 
     const [ userData, setUserData ] = useState(null);
 
     useEffect(() => {
-        // const fetchData = async () => {
-        //     const data = await fetchUser(userId);
-        //     console.log('UserData', data);
-        //     setUserData(data);
-        // }
-        // fetchData();
+        const fetchData = async () => {
+            const data = await getUserByToken();
+            console.log('UserData', data);
+            setUserData(data);
+        }
+        fetchData();
     }, []);
 
     return (
@@ -23,7 +23,7 @@ export default function MyProfile() {
         <Toolbar onTab="my_profile"/>
         <div className="my-profile-page">
             <ProfileImage username={userData?.username} />
-            <ProfileInfo userData={userData}/>
+            <ProfileInfo userData={userData} editable={true}/>
         </div>
         </>
     )

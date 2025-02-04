@@ -64,3 +64,34 @@
     padding-right: 10%;
     text-align: justify;
 }
+
+.edit {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    right: 15px;
+    bottom: 10px;
+}
+
+.profile-info input {
+    height: 30px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.profile-info input, .profile-info textarea {
+    border: 1px solid #A1CBE6;
+    border-radius: 10px;
+    font-size: max(1.2vw, 2vh);
+    font-weight: 500;
+    font-family: 'Red Hat Text';
+    outline: none;
+}
+
+.profile-info textarea {
+    resize: none;
+    width: 90%;
+    height: 100%;
+    padding: 10px;
+}

@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
-// import { fetchFriendSolicitationsToUser, acceptFriendSolicitationService, rejectFriendSolicitationService } from "../../services/friendSolicitations";
 import userImg from "/user.svg"
+import { fetchFriendshipSolicitations } from "../../services/friends";
+import { acceptFriendship, deleteFriendship } from "../../api/friends";
 
-export default function FriendRequests() {
+export default function FriendRequests({ userFilterString }) {
 
-    const userId = sessionStorage.getItem('userId');
+    const navigate = useNavigate();
+
     const [ friendRequests, setFriendRequests ] = useState([]);
+    const [ filteredRequests, setFilteredRequest ] = useState([]);
 
     useEffect(() => {
         const fetchRequests = async () => {
-            const requests = await fetchFriendSolicitationsToUser(userId);
+            const requests = await fetchFriendshipSolicitations();
             setFriendRequests(requests);
             console.log("Solicitações de amizade: ", requests)
         }   
@@ -18,27 +22,39 @@ export default function FriendRequests() {
     }, [])
 
     const handleAcceptFriendship = async (from, index) => {
-        const response = await acceptFriendSolicitationService(from, userId);
+        const response = await acceptFriendship(from);
         alert(response.message);
         const requests = friendRequests.filter((_, i) => i != index);
         setFriendRequests(requests)
     }  
 
     const handleRejectFriendship = async (from, index) => {
-        const response = await rejectFriendSolicitationService(from, userId);
+        const response = await deleteFriendship(from);
         alert(response.message);
         const requests = friendRequests.filter((_, i) => i != index);
         setFriendRequests(requests)
     }
 
+    useEffect(() => {
+        if(userFilterString === "") {
+            setFilteredRequest(friendRequests);
+        }
+        else {
+            setFilteredRequest(
+                friendRequests.filter(request => request?.username.toLowerCase().includes(userFilterString.toLowerCase()))
+            );
+        }
+
+    }, [friendRequests, userFilterString]);
+
     return (
         <div className="friend-requests">
             <h2>Solicitações de Amizade</h2>
             <div className="requests">
-                { friendRequests.map((request, index) =>
+                { filteredRequests.map((request, index) =>
                     <div className="request">
                         <img src={userImg}/>
-                        <p>{request.username}</p>
+                        <p onClick={() => navigate(`/profile/${request.id}`)} >{request.username}</p>
                         <div className="actions">
                             <div onClick={() => handleAcceptFriendship(request.id, index)}>Aceitar</div>
                             <div onClick={() => handleRejectFriendship(request.id, index)}>Recusar</div>

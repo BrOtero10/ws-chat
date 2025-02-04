@@ -30,10 +30,10 @@ export default function Messages({ fetchedMessages = [] }) {
             socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 console.log('Recebido: ', data);
-                if (data.type === 'message' && data.to === userId) {
+                if (data.type === 'message' && data.recipient == userId) {
                     setChatMessages(prev => [
                         ...prev, 
-                        { content: data.content, timestamp: new Date().toISOString(), from: data.from, to: data.to }
+                        { content: data.content, timestamp: new Date().toISOString(), sender: data.sender, recipient: data.recipient }
                     ]);
                 }
             };
@@ -46,10 +46,10 @@ export default function Messages({ fetchedMessages = [] }) {
 
     const sendMessage = () => {
         if (socket && newMessage.trim() !== '') {
-            socket.send(JSON.stringify({ type: 'message', content: newMessage, from: userId, to: friendId }));
+            socket.send(JSON.stringify({ type: 'message', content: newMessage, sender: userId, recipient: friendId }));
             setChatMessages(prev => [
                 ...prev, 
-                { content: newMessage, timestamp: new Date().toISOString(), from: userId, to: friendId }
+                { content: newMessage, timestamp: new Date().toISOString(), sender: userId, recipient: friendId }
             ]);
             setNewMessage(''); // Limpa o campo de entrada após o envio
         }
@@ -62,13 +62,15 @@ export default function Messages({ fetchedMessages = [] }) {
     };
 
     const showMessage = (msg) => (
-        <p className={`message ${msg.from === userId ? 'mine' : ''}`}>
+        <p className={`message ${msg.sender == userId ? 'mine' : ''}`}>
             <span className="timestamp">
                 {formatTimestampForMessage(msg.timestamp)}
             </span>
             <span className="text">{msg.content}</span>
         </p>
     );
+
+    useEffect(() => console.log(chatMessages), [chatMessages])
 
     return (
         <>

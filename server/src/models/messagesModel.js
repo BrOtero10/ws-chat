@@ -28,6 +28,7 @@ async function getChatMessages(userId, friendId) {
 }
 
 async function createMessage(newMessage) {
+    console.log(newMessage);
     const { sender, recipient, content } = newMessage;
     const result = await dispatchQuery(
         `INSERT INTO BrunoMessages

@@ -22,6 +22,17 @@ export const getUser = async (id) => {
     }
 };
 
+export const getUserByToken = async () => {
+    try {
+        const response = await axiosWithToken.get('/user_by_token');
+        return response.data;
+        
+    } catch (error) {
+        console.error(`Erro ao buscar usuário:`, error);
+        throw error;
+    }
+}
+
 export const getUsersByUsername = async (username) => {
     try {
         const response = await axiosWithToken.get(`/user/username/${username}`);
@@ -35,8 +46,6 @@ export const getUsersByUsername = async (username) => {
 export const login = async (userEmail, userPassword) => {
     try {
         const response = await axios.post('/api/login', { userEmail, userPassword });
-        console.log("API: ", response);
-        alert("!")
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar usuário com username ${userEmail}:`, error);

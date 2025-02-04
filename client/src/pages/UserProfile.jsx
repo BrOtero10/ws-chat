@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ProfileImage from "../components/profileImage";
 import ProfileInfo from "../components/profileInfo";
 import Toolbar from "../components/toolbar";
+import { getUser } from "../api/users";
 
 export default function UserProfile() {
     if(!sessionStorage.getItem('userId')) window.location.href = '/login';
@@ -13,13 +14,15 @@ export default function UserProfile() {
 
     useEffect(() => {
         const fetchData = async () => {
+            const data = await getUser(userId)
+            setUserData(data);
         }
         fetchData();
     }, []);
 
     return (
         <>
-        <Toolbar onTab="my_profile"/>
+        <Toolbar onTab="add_friends"/>
         <div className="my-profile-page">
             <ProfileImage username={userData?.username} />
             <ProfileInfo userData={userData} />

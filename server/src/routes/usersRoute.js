@@ -6,6 +6,7 @@ const usersController = require("../controllers/usersController");
 
 router.get('/users', usersController.getUsers);
 router.get('/user/:id', usersController.getUser);
+router.get('/user_by_token', verifyJWT, usersController.getUserByToken);
 router.get('/user/username/:username', usersController.getUserByUserName);
 router.post('/login', usersController.login);
 router.post('/user', usersController.createUser);

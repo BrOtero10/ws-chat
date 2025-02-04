@@ -13,6 +13,32 @@ const getUserFriends = async (req, res) => {
     }
 }
 
+const getFriendshipSolicitations = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const friendshipSolicitations = await friendsModel.getFriendshipSolicitations(userId);
+
+        res.status(200).json(friendshipSolicitations)
+    } catch (error) {
+        console.log("Error - getFriendshipSolicitations");
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving friendship solicitations" });
+    }
+}
+
+const getFriendshipSolicitationsFromUser  = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const friendshipSolicitations = await friendsModel.getFriendshipSolicitationsFromUser(userId);
+
+        res.status(200).json(friendshipSolicitations)
+    } catch (error) {
+        console.log("Error - getFriendshipSolicitations");
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving friendship solicitations" });
+    }
+}
+
 const createFriendshipSolicitation = async (req, res) => {
     try {
         const userId = req.userId;
@@ -57,6 +83,8 @@ const deleteFriendship = async (req, res) => {
 
 module.exports = {
     getUserFriends,
+    getFriendshipSolicitations,
+    getFriendshipSolicitationsFromUser,
     createFriendshipSolicitation,
     acceptFriendship,
     deleteFriendship,

@@ -17,8 +17,8 @@ const startWebSocketServer = (server) => {
                 console.log(`Usuário identificado: ${data.userId}`);
             } 
             else if(data.type === 'message') {
-                data.timestamp = new Date().toISOString();
-                sendMessageToUser(data.to, JSON.stringify(data));
+                data.sender = clients.get(socket);
+                sendMessageToUser(data.recipient, JSON.stringify(data));
                 messagesModel.createMessage(data);
             }
             else {
@@ -36,7 +36,7 @@ const startWebSocketServer = (server) => {
     // Função para enviar mensagem para um usuário específico
     const sendMessageToUser = (userId, message) => {
         for (const [client, id] of clients.entries()) {
-            if (id === userId) {
+            if (id == userId) {
                 client.send(message);
                 break;
             }

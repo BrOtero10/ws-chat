@@ -10,9 +10,9 @@ export const getMessage = async (sender, recipient, timestamp) => {
     }
 };
 
-export const getChatMessages = async (sender, recipient) => {
+export const getChatMessages = async (friendId) => {
     try {
-        const response = await axios.get(`/messages/${sender}/${recipient}`);
+        const response = await axios.get(`/chat-messages/${friendId}`);
         return response.data;
     } catch (error) {
         console.error(`Erro ao buscar mensagens entre usuários ${sender} e ${recipient}: `, error);

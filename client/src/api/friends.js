@@ -1,8 +1,9 @@
 import axios from '../services/axios';
 
-export const getFriends = async () => {
+export const getUserFriends = async () => {
     try {
         const response = await axios.get('/friends');
+        console.log('response: ', response)
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar amigos: ', error);
@@ -10,9 +11,34 @@ export const getFriends = async () => {
     }
 };
 
+export const getFriendshipSolicitations = async () => {
+    try {
+        const response = await axios.get('/friendship_solicitations');
+        console.log('response: ', response)
+        return response.data;
+        
+    } catch (error) {
+        console.error('Erro ao buscar solicitações de amizade: ', error);
+        throw error;
+    }
+}
+
+export const getFriendshipSolicitationsFromUser = async () => {
+    try {
+        const response = await axios.get('/friendship_solicitations_from_user');
+        console.log('response: ', response)
+        return response.data;
+        
+    } catch (error) {
+        console.error('Erro ao buscar solicitações de amizade do usuário: ', error);
+        throw error;
+    }
+}
+
+
 export const createFriendshipSolicitation = async ( targetId ) => {
     try {
-        const response = await axios.post('/friends', targetId);
+        const response = await axios.post('/friends', { targetId });
         return response.data;
     } catch (error) {
         console.error('Erro ao criar solicitação de amizade: ', error);
@@ -20,9 +46,9 @@ export const createFriendshipSolicitation = async ( targetId ) => {
     }
 }
 
-export const acceptFriendship = async ( targetId ) => {
+export const acceptFriendship = async ( requesterId ) => {
     try {
-        const response = await axios.put('/friends', targetId);
+        const response = await axios.put('/friends', { requesterId });
         return response.data;
     } catch (error) {
         console.error('Erro ao aceitar solicitação de amizade: ', error);

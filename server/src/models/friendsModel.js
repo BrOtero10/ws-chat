@@ -24,6 +24,16 @@ async function getFriendshipSolicitations(userId) {
     return friendshipSolicitations;
 }
 
+async function getFriendshipSolicitationsFromUser(userId) {
+    const friendshipSolicitations = await dispatchQuery(
+        `SELECT * 
+        FROM BrunoFriends 
+        WHERE requester = @userId AND request_status = 0;`, 
+        [ ['userId', userId] ]
+    );
+    return friendshipSolicitations;
+}
+
 async function createFriendshipSolicitation(userId, targetId) {
     const result = await dispatchQuery(
         `INSERT INTO BrunoFriends
@@ -68,6 +78,7 @@ async function deleteFriendship(userId, friendId) {
 module.exports = {
     getUserFriends,
     getFriendshipSolicitations,
+    getFriendshipSolicitationsFromUser,
     createFriendshipSolicitation,
     acceptFriendship,
     deleteFriendship,

@@ -3,18 +3,16 @@ import "./styles.css";
 // import { fetchMessagesOfPersonalChat } from "../../services/messages";
 import Messages from "./messages";
 import DetailsBar from "./detailsBar";
+import { getChatMessages } from "../../api/messages";
 
-export default function Chat({ friendId }) {
+export default function Chat({ friendId, friendUsername }) {
     
-    const userId = sessionStorage.getItem("userId");
     const [fetchedMessages, setFetchedMessages] = useState(null);
 
     useEffect(() => {
-        console.log(friendId)
         setFetchedMessages(null);
         const fetchMessages = async () => {
-            const data = await fetchMessagesOfPersonalChat(userId, friendId);
-            console.log(data);
+            const data = await getChatMessages(friendId);
             setFetchedMessages(data);
         }
         fetchMessages();
@@ -22,7 +20,7 @@ export default function Chat({ friendId }) {
 
     return (
         <>
-        <DetailsBar friendName="almeida"/>
+        <DetailsBar friendUsername={friendUsername}/>
 
         { fetchedMessages !== null &&
             <Messages fetchedMessages={fetchedMessages} />

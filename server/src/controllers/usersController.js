@@ -26,6 +26,20 @@ const getUser = async (req, res) => {
     }
 }
 
+const getUserByToken = async (req, res) => {
+    try {
+        const userId = req.userId;
+        console.log('id: ', userId);
+        const userData = await usersModel.getUser(userId);
+        console.log('userData: ', userData);
+        res.status(200).json(userData);
+    } catch (error) {
+        console.log("Error - getUser");
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving user" });
+    }
+}
+
 const getUserByUserName = async (req, res) => {
     try {
         const { username } = req.params;
@@ -61,10 +75,10 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: userData.ID_COLABORADOR }, cookieConfig.secret, { expiresIn: (cookieConfig.cookie.maxAge / 1000) }
+            { userId: userData.id }, cookieConfig.secret, { expiresIn: (cookieConfig.cookie.maxAge / 1000) }
         );
 
-        res.status(200).json({ auth: true, message: "Login succeeded", token });
+        res.status(200).json({ auth: true, message: "Login succeeded", token, userId: userData.id });
 
     } catch (error) {
         console.log("Error - login");
@@ -135,6 +149,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
     getUsers,
     getUser,
+    getUserByToken,
     getUserByUserName,
     login,
     createUser,

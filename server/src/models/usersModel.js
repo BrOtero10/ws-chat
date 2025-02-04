@@ -17,15 +17,15 @@ async function getUser(id) {
         [ ['id', id] ]
     );
 
-    return user;
+    return user[0];
 }
 
 async function getUserByUsername(username) {
     const user = await dispatchQuery(
         `SELECT id, name, email, username, birthday, bio
         FROM BrunoUsers
-        WHERE username = @username;`,
-        [ ['username', username] ]
+        WHERE username LIKE @username;`,
+        [ ['username', `%${username}%`] ]
     );
 
     return user;

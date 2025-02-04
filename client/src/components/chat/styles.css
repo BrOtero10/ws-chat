@@ -81,3 +81,7 @@
     font-weight: 600;
     color: var(--c-purple-d2);
 }
+
+.highlight {
+    background-color: yellow;
+}
